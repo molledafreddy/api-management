@@ -5,7 +5,8 @@ import LogisticOrderModel from "../models/logisticOrder";
 import PaymentTypeModel from "../models/paymentType";
 import { paymentTypeHasEgress } from "../interfaces/payment-type-has-egress.interface";
 import paymentTypeHasEgressModel from "../models/paymentTypeHasEgress";
-import { getProvider } from "./provider";
+import { getProvider, getProviders } from "./provider";
+import { getPaymentTypes } from "./paymentType";
 import { getWorkingForDate, insertWorkingDay } from "./workingDay";
 import { Egress } from "../interfaces/egress.interface";
 import EgressModel from "../models/egress";
@@ -450,10 +451,10 @@ const insertOrUpdateOrder = async (order: RequestOrder) => {
         });
         order.files = dataFiles
     }
-    // return order.files;
+    // return [order._id];
     if (order._id) {
         // return "ingreso al if realizara la actualizacion";
-        console.log('ciene con data')
+        // console.log('ciene con data')
         // return ["actualizacion",resulData._id, order._id];
         const resultUpdate = await updateOrder(order._id as string,resulData._id, order)
         return resultUpdate;
@@ -508,39 +509,41 @@ const createEgress = async (orderId: string, data: RequestOrder) => {
             amount: data.egress?.amount,
             orders: orderId,
             description: data?.descriptionPayment as string,
-            files: data?.files
+            files: data?.files,
+            type: 'orders',
+            paymentDate: data?.paymentDate,
         }
     
         const responseInsertE = await EgressModel.create(dataEgress);
         // let dataPayment = Array<paymentTypeHasEgress>;
-        console.log('responseInsertE EgressModel', responseInsertE)
+        // console.log('responseInsertE EgressModel', responseInsertE)
         if (Object.keys(data.egress?.paymentHasEgress as any).length > 0) {
-            let dataPayment: any = [];
-            await data.egress?.paymentHasEgress?.forEach(
-                (item) => {
-                const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
-                    payments: item.payments,
-                    egress: responseInsertE._id as string,
-                    paymentAmount: item.paymentAmount ,
-                }
-                dataPayment.push(dataPaymentTypeHasEgress)
-            });
-            const responseInsertP = await paymentTypeHasEgressModel.insertMany(dataPayment);
-            console.log('responseInsertP', responseInsertP)
+            const resultPayments = await getPaymentTypes();
+            if (Object.keys(resultPayments as any).length > 0) {
+                let dataPayment: any = [];
+                await data.egress?.paymentHasEgress?.forEach(
+                    (item) => {
+                        for (let i = 0; i < resultPayments.length; i++) {
+                            const type = resultPayments[i];
+                            if (type.name === item.payments) {
+                                item.payments = type._id as string;
+                            }
+                        }
+                        const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
+                            payments: item.payments,
+                            egress: responseInsertE._id as string,
+                            paymentAmount: item.paymentAmount ,
+                        }
+                        
+                        dataPayment.push(dataPaymentTypeHasEgress)
+                    
+                });
+                
+                const responseInsertP = await paymentTypeHasEgressModel.insertMany(dataPayment);
+                console.log('responseInsertP', responseInsertP)
+            }
         }
         return dataEgress; 
-        
-        //   await data.egress?.paymentHasEgress?.forEach(function (value) {
-        // console.log(value);
-        // });
-        // const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
-        //     payments: orderId,
-        //     egress: responseInsertE._id as string,
-        //     amount: '20000' ,
-        // }
-    
-        // const responseInsertP = await paymentTypeHasEgressModel.create(dataPaymentTypeHasEgress);
-        // return dataEgress; 
     }
     
       
@@ -583,6 +586,7 @@ const updateOrder = async (id:string, idWorkingDay: string, data: RequestOrder) 
     if (Object.keys(validEgress).length > 0) {
         // console.log('ingreso tiene actualizacion')
         const resultEgress = await updateEgress(id as string, data); 
+        return resultEgress;
     } else {
         // console.log('ingreso else debe crear egreseo')
         createEgress(id as string as string, data)
@@ -611,7 +615,9 @@ const updateEgress = async (orderId: string, data: RequestOrder) => {
             invoiceNumber: data.egress?.invoiceNumber,
             orders: orderId,
             description: data?.descriptionPayment,
-            amount: data?.amountPaid
+            amount: data?.amountPaid,
+            type: 'orders',
+            paymentDate: data?.paymentDate,
         }
         console.log('modelo egreso', dataEgress)
         let infoFile: any = [];
@@ -673,23 +679,40 @@ const updateEgress = async (orderId: string, data: RequestOrder) => {
         console.log('resultado egresos', responseInsertE)
 
         const deleteI = await paymentTypeHasEgressModel.deleteMany({egress: data?.egress?._id});
-        
+        console.log('data.egress?.paymentHasEgress', data.egress?.paymentHasEgress)
         if (Object.keys(data.egress?.paymentHasEgress as any).length > 0 ) {
-            let dataPayment: any = [];
-            await data.egress?.paymentHasEgress?.forEach(
-                (item: any) => {
-                const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
-                    payments: item.payments,
-                    egress: data?.egress?._id as string,
-                    paymentAmount: item.paymentAmount,
-                }
-                dataPayment.push(dataPaymentTypeHasEgress)
-            });
-            const resultType = await paymentTypeHasEgressModel.insertMany(dataPayment);
-            console.log('resulttype ingreso', resultType)
+            // let dataPayment: any = [];
+            const resultPayments = await getPaymentTypes();
+            if (Object.keys(resultPayments as any).length > 0) {
+                let dataPayment: any = [];
+                await data.egress?.paymentHasEgress?.forEach(
+                    (item) => {
+                        for (let i = 0; i < resultPayments.length; i++) {
+                            const type = resultPayments[i];
+                            if (type.name === item.payments) {
+                                item.payments = type._id as string;
+                            }
+                        }
+                        // 641b70dd865328bce57e31e8
+                        const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
+                            payments: item.payments,
+                            egress: data?.egress?._id as string,
+                            paymentAmount: item.paymentAmount ,
+                        }
+                        
+                        dataPayment.push(dataPaymentTypeHasEgress)
+                    
+                });
+                
+                const responseInsertP = await paymentTypeHasEgressModel.insertMany(dataPayment);
+                console.log('responseInsertP', responseInsertP)
+            }
         }
         return dataEgress; 
     } else {
+        console.log(' n consigio egreso')
+        console.log(' n consigio egreso')
+        console.log(' n consigio egreso')
         console.log(' n consigio egreso')
     }
       

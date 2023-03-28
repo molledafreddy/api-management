@@ -5,7 +5,7 @@ const RevenueSchema: Schema = new Schema <Revenue> (
     {
         type: {
             type: String,
-            enum: ["other", "closing"],
+            enum: ["other", "closure"],
             required: true,
         },
         amountPos: {

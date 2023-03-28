@@ -89,31 +89,35 @@ const postOrder = async (req: RequestExt, res: Response) => {
       body.users = `${user?._id}`;
       
       var valueOrder = JSON.parse(req.body.data)
-      // console.log('valueOrder', valueOrder)
+      // console.log('fireq.body.paymentHasEgressles', req.body.paymentHasEgress)
+      // res.send(req.body);
       let paymentHasEgress = [];
       if (req.body.paymentHasEgress !== undefined) {
         paymentHasEgress = JSON.parse(req.body.paymentHasEgress);
       }
+
+      // console.log('paymentHasEgress', paymentHasEgress)
+      // res.send(req.body);
       let dataFiles = [];
       if (req.body.dataFiles !== undefined) {
         dataFiles = JSON.parse(req.body.dataFiles);
       }
-      let formatAmount = 0;
+      let formatEstimatedAmount = 0;
       // console.log('valueOrder.amount', valueOrder)
-      if (valueOrder?.amount !== null && valueOrder?.amount !== undefined) {
-        
-        var monto = "$ 178.000";
-        formatAmount = valueOrder?.amount.replace(/[$.]/g,'');
+      // res.send(valueOrder);
+      if (valueOrder?.estimatedAmount !== null && valueOrder?.estimatedAmount !== undefined) {
+        formatEstimatedAmount = valueOrder?.estimatedAmount.toString().replace(/[$,]/g,'');
       }
-      // console.log('formatAmount',formatAmount)
+      // console.log('formatAmount',formatEstimatedAmount)
         // return valueOrder;
       const egress: Egress = {
         _id: valueOrder?._idEgress,
-        // _id: "",
+        paymentDate: valueOrder?.paymentDate,
         invoiceNumber: valueOrder?.invoiceNumber,
-        amount:formatAmount,
+        amount:valueOrder?.amount,
         description: valueOrder?.descriptionPayment,
-        paymentHasEgress: paymentHasEgress as any
+        paymentHasEgress: paymentHasEgress as any,
+        type: 'orders',
       }
       // console.log('datos egress', egress)
       const requestO: RequestOrder = {
@@ -122,25 +126,26 @@ const postOrder = async (req: RequestExt, res: Response) => {
         receptionDate: valueOrder?.receptionDate,
         EstimateReceptionDate: valueOrder?.estimateReceptionDate,
         creditPaymentDate: valueOrder?.creditPaymentDate,
-        amountPaid: formatAmount,
+        amountPaid: valueOrder?.amount,
         invoiceNumber: valueOrder?.invoiceNumber,
         orderDate: valueOrder?.orderDate,
         descriptionOrder: valueOrder?.descriptionOrder,
         descriptionPayment: valueOrder?.descriptionPayment,
         descriptionLogistic: valueOrder?.descriptionLogistic,
         status: valueOrder?.status,
-        estimatedAmount: valueOrder?.estimatedAmount,
+        estimatedAmount: formatEstimatedAmount,
         providers: valueOrder?.providers,
         paymentMethod: valueOrder?.paymentMethod,
         files: files as any,
         dataFiles: dataFiles as any,
         egress: egress,
         users: user,
+        type: 'orders',
       }
       // console.log('requestO', requestO)
       // res.send(body);
       // return {body};
-      // res.send(requestO);
+      // res.send(egress);
       const  responseOrder = await insertOrUpdateOrder(requestO);
       res.send(responseOrder);
   } catch (e) {

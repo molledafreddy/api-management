@@ -7,10 +7,19 @@ import mongoose from "mongoose";
 import { RequestFiles } from "../interfaces/request-files.interface";
 import { ResponsePagination } from "../interfaces/response-pagination.interface";
 import { getWorkingForDate, insertWorkingDay } from "./workingDay";
+import { ResponseError } from "../interfaces/response-error.interface";
 
 const insertOrUpdateRevenueWorkingDay = async (revenue: RequestRevenueWorkingDay) => {
-    const value = validPaidRevenue(revenue);
-    if (value != "VALID_SUCCESS") {return value;}
+    const value: any = validPaidRevenue(revenue);
+    if (value != "VALID_SUCCESS") {
+        const resError: ResponseError = {
+            codeHttp: '400',
+            code: value,
+            message: 'Error, debe verificar los montos enviados.'
+        } 
+        return resError;
+    
+    }
 
     let dataF: any = [];
     if (Object.keys(revenue.files as any).length > 0) {
@@ -34,7 +43,15 @@ const insertOrUpdateRevenueWorkingDay = async (revenue: RequestRevenueWorkingDay
         const validTurnR = await validTurn(revenue.users, 'Active');
         // console.log('data', validTurnR)
         // return validTurnR;
-        if (Object.keys(validTurnR).length <= 0) {return "NOT_FOUND_TURN";}
+        if (Object.keys(validTurnR).length <= 0) {
+            const resError: ResponseError = {
+                codeHttp: '400',
+                code: "NOT_FOUND_TURN",
+                message: 'Para Ingresar un Cierre de Caja debes tener un turno activo en la jornada de hoy'
+            } 
+            return resError;
+        }
+        console.log('inregos al revenue', revenue)
         revenue.revenue.turn = validTurnR[0]._id as string;
         revenue.revenue.workingDay = validTurnR[0].workingDay[0] as string;
         const resultData = await insertRevenue(revenue)
@@ -44,7 +61,7 @@ const insertOrUpdateRevenueWorkingDay = async (revenue: RequestRevenueWorkingDay
 }
 
 const insertOrUpdateRevenueOther = async (revenue: RequestRevenueWorkingDay) => {
-    
+    // return revenue
     if (revenue?.revenue.totalAmount as number  <=0 ) {
         return "NOT_FOUND_TOTALAMOUNT";
     }
@@ -63,7 +80,7 @@ const insertOrUpdateRevenueOther = async (revenue: RequestRevenueWorkingDay) => 
         revenue.files = dataF
         revenue.revenue.files = dataF
     }
-
+// return revenue.id
     if ( revenue.id ) {
         const resultUpdate = await updateRevenue(revenue.id as string, revenue);
         return resultUpdate;
@@ -84,6 +101,7 @@ const insertOrUpdateRevenueOther = async (revenue: RequestRevenueWorkingDay) => 
 }
 
 const insertRevenue = async (revenue: RequestRevenueWorkingDay) => {
+    console.log('inregos al insertRevenue')
     const responseInsert = await RevenueModel.create(revenue.revenue);
     console.log('result revenue insert',responseInsert)
     return responseInsert;
@@ -313,7 +331,7 @@ const getRevenueTurn = async (revenue: any) => {
     // const _id = revenue._idTurn || null;
     // console.log('order id', revenue)
     // return order;
-    
+    // console.log('llego por aca')
     const turn = revenue.turn || '';
     // const workingDay = revenue.workingDay || '';
     const users = revenue.users || '';
@@ -346,10 +364,10 @@ const getRevenueTurn = async (revenue: any) => {
         filter.turn = new Objectid(turn) ;
     }
 console.log('typetype', type)
-    if (type !== "") {
-        console.log('ingreso type')
-        filter.type = type;
-    }
+    // if (type !== "") {
+    //     console.log('ingreso type')
+    //     filter.type = type;
+    // }
     console.log('filter', filter)
     // if (users !== "") {
     //     console.log('ingreso turn')
@@ -395,7 +413,6 @@ console.log('typetype', type)
                 { $match: filter },
                 { $lookup: { from:'users', localField: 'users', foreignField: '_id',as:'users'}},
                 { $lookup: { from:'workingdays', localField: 'workingDay', foreignField: '_id',as:'workingDay'}},
-                { $lookup: { from:'detailrevenues', localField: '_id', foreignField: 'revenues', as:'detailRevenue'}},
                 {
                     $setWindowFields: {
                     output: { 

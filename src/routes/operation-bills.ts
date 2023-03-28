@@ -28,7 +28,7 @@ router.get('/payment-has-egress/:id',getPaymentHasEgress);
 // router.get('/detail/:id', checkJwt,  checkRoleAuth(['User', 'admin']), getOrderDetail);
 router.put('/:id', updateOperationBills);
 // checkJwt,checkRoleAuth(['User', 'admin']),
-router.post('/',multerMilddleware,  postOperationBills);
+router.post('/',multerMilddleware, checkJwt, checkRoleAuth(['User', 'admin']), postOperationBills);
 // router.post('/search/detail', checkJwt, checkRoleAuth(['User', 'admin']), searchOrderDetail);
 
 router.delete('/:id', deleteOperationBills);

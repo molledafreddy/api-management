@@ -8,5 +8,6 @@ export interface RequestRevenueWorkingDay  {
     users: string;
     files?:[ RequestFiles];
     dataFiles?: [any];
+    type?: string;
 }
 

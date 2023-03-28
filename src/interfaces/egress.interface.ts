@@ -11,4 +11,6 @@ export interface Egress {
     description?: String;
     files?: [RequestFiles],
     paymentHasEgress?: [paymentTypeHasEgress];
+    type: "orders" | "operationBills" | "payroll";
+    paymentDate?: Date;
 }

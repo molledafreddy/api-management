@@ -51,9 +51,9 @@ const insertTurn = async (turn: RequestTurn) => {
         resulData = resultDate[0];
     }
 
-    
     // return dataTurn;
-    if (turn._id !== null) {
+    if (turn._id) {
+        console.log('ingreso')
         const dataTurn: TurnInterf = {
             _id: turn?._id as any,
             startDate: dateStr,
@@ -63,6 +63,7 @@ const insertTurn = async (turn: RequestTurn) => {
             status: turn.status,
             statusPayment: 'Not_Payed',
         }
+        // return dataTurn;
         const responseUpdate = await Turn.findOneAndUpdate(
             {_id: turn._id },
             dataTurn,
@@ -73,7 +74,8 @@ const insertTurn = async (turn: RequestTurn) => {
     } else {
         const validTurnR = await validTurn(turn.users, status);
         if (Object.keys(validTurnR).length != 0) {return "TURN_ACTIVE";}
-        
+        console.log('lego turn._id', turn )
+        console.log('lego cfreara' )
         const dataTurn: TurnInterf = {
             startDate: dateStr,
             endDate: dateEnd,
@@ -84,7 +86,7 @@ const insertTurn = async (turn: RequestTurn) => {
             status: turn.status,
             statusPayment: 'Not_Payed',
         }
-        
+        // return dataTurn;
         const responseInsert = await Turn.create(dataTurn);
         console.log('datos ingreso',responseInsert )
         return responseInsert;

@@ -21,5 +21,6 @@ export interface RequestOrder  {
     egress?: Egress;
     users: any;
     dataFiles: [any];
+    type: 'orders',
 }
 
