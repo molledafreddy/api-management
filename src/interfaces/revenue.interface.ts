@@ -13,5 +13,5 @@ export interface Revenue {
     users?: string;
     workingDay?: string;
     files?: any;
-    type: 'other' | 'closing';
+    type: 'other' | 'closure';
 }

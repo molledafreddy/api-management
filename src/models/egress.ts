@@ -3,6 +3,15 @@ import { Egress } from "../interfaces/egress.interface";
 
 const EgressSchema: Schema = new Schema <Egress> (
     {
+        type: {
+            type: String,
+            enum: ["orders", "operationBills", "payroll"],
+            required: true
+        },
+        paymentDate: {
+            type: Date,
+            required: false
+        },
         invoiceNumber: {
             type: String,
             required: false
