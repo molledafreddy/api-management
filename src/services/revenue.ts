@@ -307,6 +307,7 @@ const getRevenue = async (id:string) => {
             { $lookup: { from:'users', localField: 'users', foreignField: '_id',as:'users'}},
             { $lookup: { from:'workingdays', localField: 'workingDay', foreignField: '_id',as:'workingDay'}},
             { $lookup: { from:'detailrevenues', localField: '_id', foreignField: 'revenues', as:'detailRevenue'}},
+            { $sort: { 'createdAt': -1 } },
         ]);
 
          // const responseItem = await OperationBillSchemaModel.findOne({id}).populate('operationBills');
@@ -420,6 +421,7 @@ console.log('typetype', type)
                     },
                 },
                 },
+                { $sort: { 'createdAt': -1 } },
                 { $skip: (page - 1) * limit || 0 },
                 { $limit: Number(limit) },
                 { 
@@ -560,6 +562,7 @@ const getRevenueOther = async (revenue: any) => {
                     },
                 },
                 },
+                { $sort: { 'createdAt': -1 } },
                 { $skip: (page - 1) * limit || 0 },
                 { $limit: Number(limit) },
                 { 

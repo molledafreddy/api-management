@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/app.ts"
+    "build": "tsc",
+    "clean": "rm -rf build",
+    "dev": "nodemon ./src/app.ts",
+    "start": "npm run build && node build/app.js"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +33,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.21.4",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.12",
     "@types/dotenv": "^8.2.0",
@@ -39,6 +43,9 @@
     "@types/jsonwebtoken": "^8.5.9",
     "@types/mongoose": "^5.11.97",
     "@types/multer": "^1.4.7",
-    "@types/sharp": "^0.31.0"
+    "@types/nodemon": "^1.19.2",
+    "@types/sharp": "^0.31.0",
+    "concurrently": "^8.0.1",
+    "nodemon": "^2.0.22"
   }
 }

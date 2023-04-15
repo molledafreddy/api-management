@@ -87,12 +87,12 @@ const postOrder = async (req: RequestExt, res: Response) => {
   try {
     const { user, body, files } = req;
       body.users = `${user?._id}`;
-      
+      console.log('user',  req.body)
       var valueOrder = JSON.parse(req.body.data)
       // console.log('fireq.body.paymentHasEgressles', req.body.paymentHasEgress)
       // res.send(req.body);
       let paymentHasEgress = [];
-      if (req.body.paymentHasEgress !== undefined) {
+      if (req.body.paymentHasEgress !== 'undefined') {
         paymentHasEgress = JSON.parse(req.body.paymentHasEgress);
       }
 
@@ -149,6 +149,7 @@ const postOrder = async (req: RequestExt, res: Response) => {
       const  responseOrder = await insertOrUpdateOrder(requestO);
       res.send(responseOrder);
   } catch (e) {
+    console.log('error', e)
       handleHttp(res, "ERROR_POST_ORDERS", e)
   }
 }

@@ -155,6 +155,7 @@ const searchEgress = async (egress: any) => {
                     },
                 },
                 },
+                { $sort: { 'createdAt': -1 } },
                 { $skip: (page - 1) * limit || 0 },
                 { $limit: Number(limit) },
             ]
@@ -253,6 +254,7 @@ const searchOrderPaitOut = async (order: any) => {
                     },
                 },
                 },
+                { $sort: { 'createdAt': -1 } },
                 { $skip: (page - 1) * limit || 0 },
                 { $limit: Number(limit) },
             ]

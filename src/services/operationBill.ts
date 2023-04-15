@@ -314,6 +314,7 @@ const getOperationBills = async (query: any) => {
             },
           },
         },
+        { $sort: { 'createdAt': -1 } },
         { $skip: (page - 1) * limit || 0 },
         { $limit: Number(limit) },
     ]);
@@ -374,6 +375,7 @@ const getOperationBill = async (id:string) => {
             { $match: valid },
             // {$match: { _id: new ObjectId("63f7ebee0e2be4525a156238") }},
             { $lookup: { from: 'egresses', localField: '_id', foreignField: 'operationBills', as: 'egress' } },
+            { $sort: { 'createdAt': -1 } },
         ]);
 
          // const responseItem = await OperationBillSchemaModel.findOne({id}).populate('operationBills');
@@ -427,7 +429,7 @@ const updateOperationBills = async (id:string, operation: RequestOperationBills)
     // return responseInsert;
     // if (responseInsert._id != undefined) {
         const resultEgress =  await updateEgress(id as string, operation);
-        return resultEgress;
+        // return resultEgress;
     // }
     return responseInsert;
 }

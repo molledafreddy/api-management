@@ -58,12 +58,12 @@ const getPaymentHasEgress = async ({params}: RequestExt, res: Response) => {
 
 const postOperationBills = async (req: RequestExt, res: Response) => {
   try {
-      console.log('req', req)
+      // console.log('req', req)
         const { user, body, files } = req;
         body.users = `${user?._id}`;
         var valueOperation = JSON.parse(req.body.data)
         // res.send(body);
-        // console.log('req.body', req.body.dataFiles)
+        console.log('req.body', valueOperation)
         if (req.body.paymentHasEgress !== undefined) {
           var paymentHasEgress = JSON.parse(req.body.paymentHasEgress);
         }

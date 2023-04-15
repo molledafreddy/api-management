@@ -222,6 +222,7 @@ const searchTurnForUser = async (turn: any) => {
                     },
                 },
                 },
+                { $sort: { 'createdAt': -1 } },
                 { $skip: (page - 1) * limit || 0 },
                 { $limit: Number(limit) },
             ]
@@ -272,6 +273,7 @@ const getTurn = async (id:string) => {
             { $match: valid },
             { $lookup: { from:'users', localField: 'users', foreignField: '_id',as:'users'}},
             { $lookup: { from:'workingdays', localField: 'workingDay', foreignField: '_id',as:'workingDay'}},
+            { $sort: { 'createdAt': -1 } },
         ]);
 
          // const responseItem = await OperationBillSchemaModel.findOne({id}).populate('operationBills');

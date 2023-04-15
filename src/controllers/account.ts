@@ -17,7 +17,6 @@ const getAccount = async ({params}: Request, res: Response) => {
 
 const getAccounts = async (req: RequestExt, res: Response) => {
   try {
-    // console.log('getAccounts', req.query)
     const query = req.query;
     const response = await accounts(query);
     res.send(response);

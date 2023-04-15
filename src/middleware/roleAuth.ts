@@ -35,7 +35,7 @@ const checkRoleAuth = (roles: string[] ) => async (req: Request, res: Response, 
     } catch (e) {
         console.log({e})
         res.status(400);
-        res.send("SESSION_NO_VALIDA")
+        res.send(["SESSION_NO_VALIDA"])
     }
 
 }
