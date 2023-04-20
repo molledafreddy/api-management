@@ -365,11 +365,11 @@ const getRevenueTurn = async (revenue: any) => {
         filter.turn = new Objectid(turn) ;
     }
 console.log('typetype', type)
-    // if (type !== "") {
-    //     console.log('ingreso type')
-    //     filter.type = type;
-    // }
-    console.log('filter', filter)
+    if (type !== "") {
+        console.log('ingreso type')
+        filter.type = type;
+    }
+    console.log('filter get-revenue-turn', filter)
     // if (users !== "") {
     //     console.log('ingreso turn')
     //     filter.users = new ObjectId(users) ;
@@ -446,6 +446,7 @@ console.log('typetype', type)
                               "updatedAt": "$updatedAt",
                               "users": "$users",
                               "workingDay": "$workingDay",
+                              "type": "$type",
                             }
                           } 
                         }

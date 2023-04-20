@@ -13,36 +13,46 @@ const insertTurn = async (turn: RequestTurn) => {
 
     let resulData: any = [];
     const status = turn.status || '';
-    let convertFechaStart = turn.startDate.toString();
-    let resultStart: any = convertFechaStart.split(" ");
-    let dataHoraStart: string = resultStart[1]
-    let horaStart = dataHoraStart.split(":");
-    let HStar: number = Number(horaStart[0]);
-    let MNStar: number = Number(horaStart[1]);
-    let SStar: number = Number(horaStart[2]); 
 
-    let dataFechaStart: string = resultStart[0]
-    let fechaStart = dataFechaStart.split("/")
-    let YStart: number = Number(fechaStart[2]);
-    let MStart: number = Number(fechaStart[0]);
-    let DStart: number = Number(fechaStart[1]);
-    var dateStr = new Date(YStart, MStart-1, DStart, HStar-3, MNStar, SStar,0);
+    var dateStr = new Date();
+    var dateEnd = new Date(); 
     
-    let convertFechaEnd = turn?.endDate?.toString();
-    let resultEnd: any = convertFechaEnd?.split(" ");
-    let dataHoraEnd: string = resultEnd[1];
-    let horaEnd = dataHoraEnd.split(":");
-    let HEnd: number = Number(horaEnd[0]);
-    let MNEnd: number = Number(horaEnd[1]);
-    let SEnd: number = Number(horaEnd[2]); 
+    if (turn.startDate !== undefined) {
+        let convertFechaStart = turn.startDate.toString();
+        let resultStart: any = convertFechaStart.split(" ");
+        let dataHoraStart: string = resultStart[1]
+        let horaStart = dataHoraStart.split(":");
+        let HStar: number = Number(horaStart[0]);
+        let MNStar: number = Number(horaStart[1]);
+        let SStar: number = Number(horaStart[2]); 
+    
+        let dataFechaStart: string = resultStart[0]
+        let fechaStart = dataFechaStart.split("/")
+        let YStart: number = Number(fechaStart[2]);
+        let MStart: number = Number(fechaStart[0]);
+        let DStart: number = Number(fechaStart[1]);
+        dateStr = new Date(YStart, MStart-1, DStart, HStar-3, MNStar, SStar,0);     
+    }
 
-    let dataFechaEnd: string = resultEnd[0]
-    let fechaEnd = dataFechaEnd.split("/")
-    let YEnd: number = Number(fechaEnd[2]);
-    let MEnd: number = Number(fechaEnd[0]);
-    let DEnd: number = Number(fechaEnd[1]);
-
-    var dateEnd = new Date(YEnd, MEnd-1, DEnd, HEnd-3, MNEnd, SEnd,0);
+    if (turn.endDate !== undefined) {
+        let convertFechaEnd = turn?.endDate?.toString();
+        let resultEnd: any = convertFechaEnd?.split(" ");
+        let dataHoraEnd: string = resultEnd[1];
+        let horaEnd = dataHoraEnd.split(":");
+        let HEnd: number = Number(horaEnd[0]);
+        let MNEnd: number = Number(horaEnd[1]);
+        let SEnd: number = Number(horaEnd[2]); 
+    
+        let dataFechaEnd: string = resultEnd[0]
+        let fechaEnd = dataFechaEnd.split("/")
+        let YEnd: number = Number(fechaEnd[2]);
+        let MEnd: number = Number(fechaEnd[0]);
+        let DEnd: number = Number(fechaEnd[1]);
+    
+        dateEnd = new Date(YEnd, MEnd-1, DEnd, HEnd-3, MNEnd, SEnd,0);
+    }
+    
+    
     
     const resultDate = await getWorkingForDate();
     if ( Object.keys(resultDate).length == 0) {
@@ -95,7 +105,7 @@ const insertTurn = async (turn: RequestTurn) => {
    
 }
 
-const validTurn = async (userId:string, statusP: any) => {
+const validTurn = async (userId:any, statusP: any) => {
 
     let now= new Date();
     let filter: any = {};

@@ -63,14 +63,16 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
         body.users = `${user?._id}`;
         var valueOperation = JSON.parse(req.body.data)
         // res.send(body);
-        console.log('req.body', valueOperation)
-        if (req.body.paymentHasEgress !== undefined) {
-          var paymentHasEgress = JSON.parse(req.body.paymentHasEgress);
+        // console.log('req.body', req.body)
+        var paymentHasEgress = [];
+        if (req.body.paymentHasEgress !== 'undefined') {
+          paymentHasEgress = JSON.parse(req.body.paymentHasEgress);
         }
+        // console.log('req.body.dataFiles', req.body.dataFiles)
         if (req.body.dataFiles !== undefined) {
           var dataFiles = JSON.parse(req.body.dataFiles);
         }
-        // console.log('files', files);
+        console.log('files', files);
         let now= new Date();
         const formatoMap = {
             dd: now.getDate(),
@@ -78,12 +80,13 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
             yy: now.getFullYear().toString().slice(-2),
             yyyy: now.getFullYear()
         };
-
+        // console.log('formatoMap', formatoMap)
         let formatAmount = 0;
         if (valueOperation?.amount !== null && valueOperation?.amount !== undefined) {
           formatAmount = valueOperation?.amount.toString().replace(/[$.,]/g,'');
         }
-
+        
+        // console.log('formatAmount', formatAmount)
         const egress: Egress = {
           _id: valueOperation._idEgress,
           invoiceNumber: valueOperation.invoiceNumber,
@@ -93,6 +96,8 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
           type: 'operationBills',
           paymentDate: new Date(formatoMap.yyyy,formatoMap.mm-1,formatoMap.dd,12,0,0)
         }
+
+        
     
         const reqOperation: RequestOperationBills = {
           id: body?.id,
@@ -104,7 +109,9 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
           files: files as any,
           dataFiles: dataFiles as any,
         }
-        // res.send(reqOperation);
+
+        // console.log('egress', reqOperation);
+        // // res.send(reqOperation);
         if (!valueOperation._id) {
           // console.log('llego al post')
           const  responseOrder = await insertOperationBills(reqOperation);

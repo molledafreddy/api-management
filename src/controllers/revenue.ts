@@ -89,9 +89,10 @@ const postRevenueWorkingDay = async (req: RequestExt, res: Response) => {
       if (req.body.dataFiles !== undefined) {
         dataFiles = JSON.parse(req.body.dataFiles);
       }
-
+      // res.status(500)
+      // res.send(body);
       let formattotalAmount = 0;
-      console.log('valueOrder.amount', valueRevenue)
+      console.log('valueOrder.amount', valueRevenue.datos)
       // console.log('valueRevenue?.totalAmount', valueRevenue?.totalAmount)
       // res.send(valueRevenue);
       if (valueRevenue?.totalAmount !== null && valueRevenue?.totalAmount !== undefined) {

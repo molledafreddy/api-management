@@ -393,9 +393,9 @@ const getOperationBill = async (id:string) => {
 }
 
 const updateOperationBills = async (id:string, operation: RequestOperationBills) => {
-    const value = validPaidOperation(operation);
+    const value: any = validPaidOperation(operation);
     if (value != "VALID_SUCCESS") {
-        return value;
+        return [value];
     }
     // return operation;
     let dataFiles: any = [];

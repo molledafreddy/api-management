@@ -242,21 +242,36 @@ const searchOrderPaitOut = async (order: any) => {
             $lt: new Date(myArray2[2],myArray2[0]-1, myArray2[1],23,59,59, 999)
 
         }
-    } 
-    else {
-        // console.log('ingrso al else')
+    } else {
+        console.log('ingrso al else')
         let now= new Date();
+
         const formatoMap = {
             dd: now.getDate(),
             mm: now.getMonth(),
             yyyy: now.getFullYear()
         };
-       
+        // var dateStr = new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,0,0,0,0);
+        // var nextDate = new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,23,59,59, 999);
+        
         filter.paymentDate = {
-            $gte: new Date(formatoMap.yyyy, formatoMap.mm, formatoMap.dd,0,0,0,0), 
-            $lt: new Date(formatoMap.yyyy,formatoMap.mm, formatoMap.dd,23,59,59, 999)
+            $gte: new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,0,0,0,0), 
+            $lt:  new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,23,59,59, 999)
         }
+
+        // const formatoMap = {
+        //     dd: now.getDate(),
+        //     mm: now.getMonth(),
+        //     yyyy: now.getFullYear()
+        // };
+       
+        // filter.paymentDate = {
+        //     $gte: new Date(formatoMap.yyyy, formatoMap.mm, formatoMap.dd-2,0,0,0,0), 
+        //     $lt: new Date(formatoMap.yyyy,formatoMap.mm, formatoMap.dd+1,23,59,59, 999)
+        // }
     }
+
+    console.log('filter', filter)
     try {
         let responseSum: any = [];
         responseSum = await OrderModel.aggregate(

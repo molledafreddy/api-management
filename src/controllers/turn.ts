@@ -49,7 +49,7 @@ const postTurn = async (req: RequestExt, res: Response) => {
     try {
         const { user, body } = req;
         body.users = `${user?._id}`;
-        // console.log('body',body)
+        console.log('body',body)
         // res.send(body);
         const  responseTurn = await insertTurn(body);
         res.send(responseTurn);
