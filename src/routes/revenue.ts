@@ -31,11 +31,11 @@ const router = Router()
 // router.put('/:id', updateOperationBills);
 // router.post('/upload', upload.single() , postRevenueWorkingDay);
 
-router.get('/get-revenue-turn', checkJwt,checkRoleAuth(['User', 'admin']), getRevenueTurn);
-router.get('/get-revenue-other', checkJwt,checkRoleAuth(['User', 'admin']), getRevenueOther);
-router.get('/:id', checkJwt, checkRoleAuth(['User', 'admin']), getRevenue);
-router.post('/working-day', multerMilddleware, checkJwt,checkRoleAuth(['User', 'admin']), postRevenueWorkingDay);
-router.post('/other', multerMilddleware, checkJwt,checkRoleAuth(['User', 'admin']), postRevenueOther);
+router.get('/get-revenue-turn', checkJwt,checkRoleAuth(['User', 'Admin']), getRevenueTurn);
+router.get('/get-revenue-other', checkJwt,checkRoleAuth(['User', 'Admin']), getRevenueOther);
+router.get('/:id', checkJwt, checkRoleAuth(['User', 'Admin']), getRevenue);
+router.post('/working-day', multerMilddleware, checkJwt,checkRoleAuth(['User', 'Admin']), postRevenueWorkingDay);
+router.post('/other', multerMilddleware, checkJwt,checkRoleAuth(['User', 'Admin']), postRevenueOther);
 // multerMilddleware.single('invoiceFile')
 // router.get('/data', checkJwt, multerMilddleware.single('myfile'), getFile);
 

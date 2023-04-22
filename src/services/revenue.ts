@@ -37,6 +37,7 @@ const insertOrUpdateRevenueWorkingDay = async (revenue: RequestRevenueWorkingDay
     }
 
     if ( revenue.id ) {
+
         const resultUpdate = await updateRevenue(revenue.id as string, revenue);
         return resultUpdate;
     } else {
@@ -122,6 +123,10 @@ const updateRevenue = async (revenueId: string, revenue: RequestRevenueWorkingDa
             amountTurn: revenue.revenue.totalAmount,
             totalAmount: revenue.revenue.totalAmount,
             type: revenue.revenue.type,
+            validAdmin:  revenue.validAdmin,
+            noteValid:  revenue.noteValid === undefined ? '' : revenue.noteValid,
+            usersAdmin:  revenue.usersAdmin,
+            validDate: new Date()
         }
         
         let infoFile: any = [];
@@ -336,6 +341,7 @@ const getRevenueTurn = async (revenue: any) => {
     const turn = revenue.turn || '';
     // const workingDay = revenue.workingDay || '';
     const users = revenue.users || '';
+    const role = revenue.role || '';
     const page = parseInt(revenue.page, 10)  || 1;
     const limit = parseInt(revenue.limit, 10) || 10;
     const type = revenue.type || '';
@@ -364,16 +370,19 @@ const getRevenueTurn = async (revenue: any) => {
         // console.log('ingreso turn')
         filter.turn = new Objectid(turn) ;
     }
-console.log('typetype', type)
+console.log('users', role)
     if (type !== "") {
         console.log('ingreso type')
         filter.type = type;
     }
     console.log('filter get-revenue-turn', filter)
-    // if (users !== "") {
-    //     console.log('ingreso turn')
-    //     filter.users = new ObjectId(users) ;
-    // }
+    if (users !== "" && role !== 'Admin') {
+        console.log('ingreso es users')
+        // filter.users = new ObjectId(users) ;
+        filter.users = new Objectid(users);
+    } else {
+        console.log('es admin')
+    }
     // console.log('turn', users)
     // return workingDay;
     // if (workingDay !== null) {
@@ -447,6 +456,10 @@ console.log('typetype', type)
                               "users": "$users",
                               "workingDay": "$workingDay",
                               "type": "$type",
+                              "validAdmin": "$validAdmin",
+                              "noteValid": "$noteValid",
+                              "validDate": "$validDate",
+                              "usersAdmin": "$usersAdmin",
                             }
                           } 
                         }

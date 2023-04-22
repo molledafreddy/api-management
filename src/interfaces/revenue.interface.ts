@@ -11,7 +11,11 @@ export interface Revenue {
     amountTurn: number;
     totalAmount: number;
     users?: string;
+    usersAdmin?: string;
     workingDay?: string;
     files?: any;
     type: 'other' | 'closure';
+    validAdmin?: 'Verificado' | 'por_verificar' | 'con_error';
+    noteValid?: string;
+    validDate?: Date;
 }

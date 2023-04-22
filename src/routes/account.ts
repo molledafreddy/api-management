@@ -17,7 +17,7 @@ const router = Router()
  * http://localhost:3002/accounts [GET]
  */
 //  checkJwt, checkRoleAuth(['User', 'admin']),
-router.get('/', checkJwt, checkRoleAuth(['User', 'admin']), getAccounts);
+router.get('/', checkJwt, checkRoleAuth(['User', 'Admin']), getAccounts);
 // logMiddleware,
 router.get('/:id',  getAccount);
 router.put('/:id', updateAccount);

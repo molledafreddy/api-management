@@ -36,10 +36,11 @@ const getRevenue = async ({params}: RequestExt, res: Response) => {
 
 const getRevenueTurn = async (req: RequestExt, res: Response) => {
   try {
-        // console.log('reqssss getRevenueTurn', req)
+        console.log('reqssss getRevenueTurn', req?.user?.role)
         const { user, body, query } = req;
         // const query = req.query;
         query.users = `${user?._id}`;
+        query.role = `${user?.role}`;
         // return body;
         // console.log('query', query)
         // res.send(query);
@@ -93,28 +94,12 @@ const postRevenueWorkingDay = async (req: RequestExt, res: Response) => {
       // res.send(body);
       let formattotalAmount = 0;
       console.log('valueOrder.amount', valueRevenue.datos)
+      console.log('valueOrder user',user)
       // console.log('valueRevenue?.totalAmount', valueRevenue?.totalAmount)
       // res.send(valueRevenue);
       if (valueRevenue?.totalAmount !== null && valueRevenue?.totalAmount !== undefined) {
         valueRevenue.totalAmount = Number(valueRevenue?.totalAmount.toString().replace(/[$,]/g,'')) ;
       }
-      // valueRevenue
-      // const revenue: Revenue = {
-      //   amountTransfer?: number;
-      //   amountPos?: number;
-      //   amountCash?: number;
-      //   amountOther?: number;
-      //   amountSistem?: number;
-      //   description?: String;
-      //   turn?: String;
-      //   cashFund?: number;
-      //   amountTurn: number;
-      //   totalAmount: number;
-      //   users?: string;
-      //   workingDay?: string;
-      //   files?: any;
-      //   type: 'other' | 'closing';
-      // }
       valueRevenue.type = 'closure';
       const reqRevenue: RequestRevenueWorkingDay = {
         id: valueRevenue._id,
@@ -123,7 +108,10 @@ const postRevenueWorkingDay = async (req: RequestExt, res: Response) => {
         users: user?._id,
         dataFiles: dataFiles as any,
         files: files as any,
-        type: valueRevenue.type
+        type: valueRevenue.type,
+        noteValid: valueRevenue.noteValid,
+        validAdmin: valueRevenue.validAdmin,
+        usersAdmin: user?._id
       }
       // res.send(reqRevenue);
       const  responseOrder = await insertOrUpdateRevenueWorkingDay(reqRevenue);
@@ -165,28 +153,6 @@ const postRevenueOther = async (req: RequestExt, res: Response) => {
   }
 }
 
-
-
-// const updateRevenueWorkingDay = async ({params, body}: Request, res: Response) => {
-//   try {
-//       const {id} = params;
-//       const response = await updateOperation(id, body);
-//       res.send(response);
-//   } catch (e) {
-//       handleHttp(res, "ERROR_UPDATE_OPERATIONBILLS")
-//   }
-// }
-
-// const deleteOperationBills = async ({params}: Request, res: Response) => {
-//   try {
-//       const {id} = params;
-//       const response = await deleteOperationBill(id);
-//       res.send(response);
-//   } catch (e) {
-//       handleHttp(res, "ERROR_DELETE_OPERATIONBILLS")
-//   }
-// }
-// , updateOperationBills,  deleteOperationBills
 export { getRevenues, getRevenue, postRevenueWorkingDay, getRevenueTurn, getRevenueOther, postRevenueOther};
 
 

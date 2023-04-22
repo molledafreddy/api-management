@@ -30,7 +30,7 @@ const router = Router()
 // checkJwt, checkRoleAuth(['User', 'admin']),
 // router.post('/',multerMilddleware, checkJwt, checkRoleAuth(['User', 'admin']), postOrder);
 // checkJwt, checkRoleAuth(['User', 'admin']),
-router.post('/search', checkJwt, checkRoleAuth(['User', 'admin']),  searchEgress);
+router.post('/search', checkJwt, checkRoleAuth(['User', 'Admin']),  searchEgress);
 
 // router.delete('/:id', deleteItem);
 

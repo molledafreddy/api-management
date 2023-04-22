@@ -10,11 +10,11 @@ const router = Router()
  * http://localhost:3002/items [GET]
  */
 // router.get('/', checkJwt, checkRoleAuth(['User', 'admin']), getTurn);
-router.get('/:id', checkJwt, checkRoleAuth(['User', 'admin']), getTurn);
+router.get('/:id', checkJwt, checkRoleAuth(['User', 'Admin']), getTurn);
 router.put('/:id', updateTurn);
 router.post('/',checkJwt, postTurn);
 router.delete('/:id', deleteTurn);
 // logMiddleware,
-router.get('/search/for/user', checkJwt, checkRoleAuth(['User', 'admin']), getTurnsForUser);
+router.get('/search/for/user', checkJwt, checkRoleAuth(['User', 'Admin']), getTurnsForUser);
 
 export { router};

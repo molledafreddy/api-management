@@ -8,6 +8,11 @@ const RevenueSchema: Schema = new Schema <Revenue> (
             enum: ["other", "closure"],
             required: true,
         },
+        validAdmin: {
+            type: String,
+            enum: ["Verificado", "por_verificar" , "con_error"],
+            required: false,
+        },
         amountPos: {
             type: Number,
             required: false
@@ -31,6 +36,10 @@ const RevenueSchema: Schema = new Schema <Revenue> (
         description: {
             type: String,
         },
+        noteValid: {
+            type: String,
+            required: false
+        },
         totalAmount: {
             type: Number,
             required: false
@@ -49,6 +58,11 @@ const RevenueSchema: Schema = new Schema <Revenue> (
             ref: 'users',
             required: false
         }],
+        usersAdmin: [{
+            type: Schema.Types.ObjectId,
+            ref: 'users',
+            required: false
+        }],
         workingDay: [{
             type: Schema.Types.ObjectId,
             ref: 'workingDay',
@@ -57,7 +71,11 @@ const RevenueSchema: Schema = new Schema <Revenue> (
         files: {
             type: [],
             required: false
-        }
+        },
+        validDate: {
+            type: Date,
+            required: false
+        },
     }, 
     {
         timestamps: true,
