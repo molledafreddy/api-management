@@ -334,6 +334,4 @@ const deleteCar = async (id:string) => {
 
 export { insertTurn, searchTurnForUser, getTurn, getCars, getCar, updateCar, deleteCar, validTurn };
 
-function ISODate(arg0: string) {
-    throw new Error("Function not implemented.");
-}
+

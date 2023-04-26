@@ -22,5 +22,10 @@ export interface RequestOrder  {
     users: any;
     dataFiles: [any];
     type: 'orders',
+    validAdmin?: 'Verificado' | 'por_verificar' | 'con_error';
+    noteValid?: string;
+    validDate?: Date;
+    usersAdmin?: string;
+    role?: string;
 }
 

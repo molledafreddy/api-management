@@ -416,7 +416,7 @@ console.log('users', role)
             $gte: dateStr, $lt: nextDate
         }
     }
-
+console.log('datos filter', filter)
     try {
         const responseItem = await RevenueModel.aggregate(
             [

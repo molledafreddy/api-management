@@ -11,5 +11,6 @@ export interface ResponsePagination  {
     prevPage: any;
     nextPage: number;
     sum?: number;
+    paymentHasEgress?: any[];
 }
 

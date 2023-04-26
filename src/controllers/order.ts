@@ -141,9 +141,14 @@ const postOrder = async (req: RequestExt, res: Response) => {
         egress: egress,
         users: user,
         type: 'orders',
+        validDate: user?.role !== 'Admin' ? undefined: new  Date(),
+        noteValid: valueOrder?.noteValid,
+        validAdmin: valueOrder?.validAdmin,
+        usersAdmin: user?.role !== 'Admin' ? undefined: user?._id,
+        role: user?.role
       }
       // console.log('requestO', requestO)
-      // res.send(body);
+      // res.send(requestO);
       // return {body};
       // res.send(egress);
       const  responseOrder = await insertOrUpdateOrder(requestO);

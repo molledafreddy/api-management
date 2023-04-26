@@ -14,4 +14,9 @@ export interface Order extends Auth {
     providers?: string;
     paymentMethod: 'discounted' | 'credit' | 'partial' | 'consignment';
     invoiceFile?: string;
+    validAdmin?: 'Verificado' | 'por_verificar' | 'con_error';
+    noteValid?: string;
+    validDate?: Date;
+    usersAdmin?: string;
+    role?: string;
 }

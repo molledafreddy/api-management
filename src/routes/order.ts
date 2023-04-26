@@ -27,7 +27,7 @@ router.get('/detail/:id', checkJwt,  checkRoleAuth(['User', 'Admin']), getOrderD
 
 // router.put('/:id', updateItem);
 // checkJwt, checkRoleAuth(['User', 'admin']),
-router.post('/',multerMilddleware, checkJwt, checkRoleAuth(['User', 'admin']), postOrder);
+router.post('/',multerMilddleware, checkJwt, checkRoleAuth(['User', 'Admin']), postOrder);
 // checkJwt, checkRoleAuth(['User', 'admin']),
 router.post('/search/detail',  searchOrderDetail);
 

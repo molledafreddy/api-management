@@ -13,6 +13,7 @@ import EgressModel from "../models/egress";
 import { RequestOrder } from "../interfaces/request-order.interface";
 import mongoose from "mongoose";
 import { ResponsePagination } from "../interfaces/response-pagination.interface";
+import { getPaymentHasEgress } from "./operationBill";
 const ObjectId = mongoose.Types.ObjectId;
 
 const getOrders = async () => {
@@ -225,14 +226,15 @@ const searchOrderPaitOut = async (order: any) => {
         hasNextPage: true,
         prevPage: null ,
         nextPage: 0 ,
-        sum: 0
+        sum: 0,
+        paymentHasEgress: []
     }
     
     if (order.status !== '') {
         filter.status = status;
     }
 
-    if (((order.startDate !== 'null' && order.startDate !== '')) 
+    if ((order.startDate !== 'null' && order.startDate !== '')
         && (order.endDate !== 'null' && order.endDate !== '')) {
             console.log('imgreso a la validacion fecha', order.startDate)
         const myArray = order?.startDate.split("/");
@@ -284,6 +286,7 @@ const searchOrderPaitOut = async (order: any) => {
             [
                 { $match: filter},
                 { $lookup: { from:'egresses', localField: '_id', foreignField: 'orders',as:'egress'}},
+                // { $lookup: { from:'paymentTypeHasEgress', localField: 'egress', foreignField: 'egress._id',as:'paymentTypeHasEgress'}},
                 { $lookup: { from:"providers", localField: "providers", foreignField: "_id", as: "providers"},},
                 {
                     $setWindowFields: {
@@ -299,9 +302,16 @@ const searchOrderPaitOut = async (order: any) => {
         );
         
         if (Object.entries(responseItem).length > 0) {
+            // const resultpayment = await getDinamicpayment(responseItem)
+            let datapayment: any = [];
+            await responseItem?.forEach( async (element: any) => {
+                await datapayment.push(element?.egress[0]?._id);
+            });
+            const res = await paymentTypeHasEgressModel.find({egress: {$in:datapayment}});
             response.docs = responseItem;
             response.sum = responseSum[0]?.sum;
             response.limit = limit;
+            response.paymentHasEgress = res;
             response.totalPages = Math.ceil( responseItem[0].totalDocs / limit );
             response.page = (page - 1) * limit || 0;
             response.prevPage = page;
@@ -311,6 +321,26 @@ const searchOrderPaitOut = async (order: any) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+const getDinamicpayment = async (data: any) => { 
+    // console.log('egresos getDinamicpayment',data )
+    let datapayment: any = [];
+    if (Object.entries(data).length > 0) {
+       let valueD = await data?.forEach( async (element: any) => {
+            // let result = await getPaymentHasEgress(element?.egress[0]?._id)
+            const responseItem = await paymentTypeHasEgressModel.find({egress: element?.egress[0]?._id});
+            console.log('element result')
+            console.log('element result')
+           
+            await datapayment.push(responseItem)
+            // console.log('element result', datapayment)
+            // return datapayment;
+        });
+        console.log('element result datapayment', datapayment)
+    }
+    // console.log('datapayment getDinamicpayment',datapayment )
+    return datapayment;
 }
 
 const getOrderDetail = async (id:string) => {
@@ -551,7 +581,8 @@ const createEgress = async (orderId: string, data: RequestOrder) => {
                         const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
                             payments: item.payments,
                             egress: responseInsertE._id as string,
-                            paymentAmount: item.paymentAmount ,
+                            paymentAmount: item.paymentAmount,
+                            originMoney: item?.originMoney,
                         }
                         
                         dataPayment.push(dataPaymentTypeHasEgress)
@@ -717,6 +748,7 @@ const updateEgress = async (orderId: string, data: RequestOrder) => {
                             payments: item.payments,
                             egress: data?.egress?._id as string,
                             paymentAmount: item.paymentAmount ,
+                            originMoney: item?.originMoney,
                         }
                         
                         dataPayment.push(dataPaymentTypeHasEgress)

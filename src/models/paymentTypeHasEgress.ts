@@ -7,6 +7,10 @@ const paymentTypeHasEgressSchema: Schema = new Schema <paymentTypeHasEgress> (
             type: String,
             required: true
         },
+        originMoney: {
+            type: String,
+            required: false
+        },
         payments: [{
             type: Schema.Types.ObjectId,
             ref: 'PaymentType'
