@@ -7,6 +7,11 @@ var RevenueSchema = new mongoose_1.Schema({
         enum: ["other", "closure"],
         required: true,
     },
+    validAdmin: {
+        type: String,
+        enum: ["Verificado", "por_verificar", "con_error"],
+        required: false,
+    },
     amountPos: {
         type: Number,
         required: false
@@ -30,6 +35,10 @@ var RevenueSchema = new mongoose_1.Schema({
     description: {
         type: String,
     },
+    noteValid: {
+        type: String,
+        required: false
+    },
     totalAmount: {
         type: Number,
         required: false
@@ -48,6 +57,11 @@ var RevenueSchema = new mongoose_1.Schema({
             ref: 'users',
             required: false
         }],
+    usersAdmin: [{
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'users',
+            required: false
+        }],
     workingDay: [{
             type: mongoose_1.Schema.Types.ObjectId,
             ref: 'workingDay',
@@ -56,7 +70,11 @@ var RevenueSchema = new mongoose_1.Schema({
     files: {
         type: [],
         required: false
-    }
+    },
+    validDate: {
+        type: Date,
+        required: false
+    },
 }, {
     timestamps: true,
     versionKey: false

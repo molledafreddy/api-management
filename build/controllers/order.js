@@ -188,10 +188,10 @@ var postOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 _a.trys.push([0, 2, , 3]);
                 user = req.user, body = req.body, files = req.files;
                 body.users = "".concat(user === null || user === void 0 ? void 0 : user._id);
-                console.log('user', user);
+                console.log('user', req.body);
                 valueOrder = JSON.parse(req.body.data);
                 paymentHasEgress = [];
-                if (req.body.paymentHasEgress !== undefined) {
+                if (req.body.paymentHasEgress !== 'undefined') {
                     paymentHasEgress = JSON.parse(req.body.paymentHasEgress);
                 }
                 dataFiles = [];
@@ -234,6 +234,11 @@ var postOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                     egress: egress,
                     users: user,
                     type: 'orders',
+                    validDate: (user === null || user === void 0 ? void 0 : user.role) !== 'Admin' ? undefined : new Date(),
+                    noteValid: valueOrder === null || valueOrder === void 0 ? void 0 : valueOrder.noteValid,
+                    validAdmin: valueOrder === null || valueOrder === void 0 ? void 0 : valueOrder.validAdmin,
+                    usersAdmin: (user === null || user === void 0 ? void 0 : user.role) !== 'Admin' ? undefined : user === null || user === void 0 ? void 0 : user._id,
+                    role: user === null || user === void 0 ? void 0 : user.role
                 };
                 return [4 /*yield*/, (0, order_1.insertOrUpdateOrder)(requestO)];
             case 1:

@@ -30,6 +30,6 @@ router.get('/payment-has-egress/:id', operationBills_1.getPaymentHasEgress);
 // router.get('/detail/:id', checkJwt,  checkRoleAuth(['User', 'admin']), getOrderDetail);
 router.put('/:id', operationBills_1.updateOperationBills);
 // checkJwt,checkRoleAuth(['User', 'admin']),
-router.post('/', file_1.default, session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'admin']), operationBills_1.postOperationBills);
+router.post('/', file_1.default, session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), operationBills_1.postOperationBills);
 // router.post('/search/detail', checkJwt, checkRoleAuth(['User', 'admin']), searchOrderDetail);
 router.delete('/:id', operationBills_1.deleteOperationBills);

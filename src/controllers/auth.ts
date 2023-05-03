@@ -8,7 +8,8 @@ const registerCtrl = async ({body}: Request, res: Response ) => {
 
 const loginCtrl = async ({body}: Request, res: Response ) => {
     const {email, password} = body;
-    const responseUser = await loginUser({email, password});
+    const dataEmail = email.toLowerCase()
+    const responseUser = await loginUser({email: dataEmail, password});
 
     if (responseUser === "NOT_FOUND_USER") {
         res.status(403);

@@ -139,6 +139,7 @@ var postTurn = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 _a.trys.push([0, 2, , 3]);
                 user = req.user, body = req.body;
                 body.users = "".concat(user === null || user === void 0 ? void 0 : user._id);
+                console.log('body', body);
                 return [4 /*yield*/, (0, turn_1.insertTurn)(body)];
             case 1:
                 responseTurn = _a.sent();

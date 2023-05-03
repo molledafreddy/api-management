@@ -5,29 +5,32 @@ import { encrypt, verified } from "../utils/bcrypt.handle";
 import { generateToken } from "../utils/jwt.handle";
 
 const registerNewUser = async ({email, password, name,role}: User) => {
-    const checkIs = await UserModel.findOne({email});
-    if (checkIs) return "ALREAY_USER";
+    const dataEmail = email.toLowerCase()
+    console.log('dataEmail',dataEmail)
+    const checkIs = await UserModel.find({email:dataEmail});
+    console.log('checkIs', checkIs)
+    if (checkIs.length > 0) return "ALREAY_USER";
     const passHash = await encrypt(password);
 
-    const registerNewUser = await UserModel.create({email, password: passHash, name, role}); 
+    const registerNewUser = await UserModel.create({email: dataEmail, password: passHash, name, role}); 
+    console.log('registerNewUser', registerNewUser)
     return registerNewUser; 
 };
 
 const loginUser = async ({email, password}: Auth) => {
-    const checkIs = await UserModel.findOne({ email });
-    console.log('checkis', checkIs);
-    if (!checkIs) return "NOT_FOUND_USER";
+    // const checkIs = await UserModel.findOne({ email });
+    const dataEmail = email.toLowerCase()
+    const checkIs = await UserModel.find({email:dataEmail});
+    if (checkIs?.length === 0) return "NOT_FOUND_USER";
     
-    const passwordHash = checkIs!.password;
+    const passwordHash = checkIs[0]?.password;
     const isCorrect = await verified(password, passwordHash);
-
     if (!isCorrect) return "NOT_FOUND_USER";
     
-    const token = await generateToken(checkIs);
-    console.log('usuario encontrado', token);
+    const token = await generateToken(checkIs[0]);
     const data = {
         token,
-        user: checkIs
+        user: checkIs[0]
     };
     
     return data;

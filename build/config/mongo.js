@@ -44,7 +44,8 @@ function dbConnect() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    DB_URI = "mongodb+srv://molledafreddy:freddy2..@cluster0.1e16p.mongodb.net/prueba";
+                    DB_URI = process.env.DB_URI;
+                    // const DB_URI = "mongodb+srv://molledafreddy:freddy2..@cluster0.1e16p.mongodb.net/app-manager";
                     console.log(DB_URI);
                     return [4 /*yield*/, (0, mongoose_1.connect)(DB_URI)];
                 case 1:

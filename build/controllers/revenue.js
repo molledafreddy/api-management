@@ -87,20 +87,23 @@ var getRevenue = function (_a, res) {
 exports.getRevenue = getRevenue;
 var getRevenueTurn = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, body, query, responseItem, e_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _b.trys.push([0, 2, , 3]);
+                console.log('reqssss getRevenueTurn', (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.role);
                 user = req.user, body = req.body, query = req.query;
                 // const query = req.query;
                 query.users = "".concat(user === null || user === void 0 ? void 0 : user._id);
+                query.role = "".concat(user === null || user === void 0 ? void 0 : user.role);
                 return [4 /*yield*/, (0, revenue_1.getRevenueTurn)(query)];
             case 1:
-                responseItem = _a.sent();
+                responseItem = _b.sent();
                 res.send(responseItem);
                 return [3 /*break*/, 3];
             case 2:
-                e_3 = _a.sent();
+                e_3 = _b.sent();
                 (0, error_handle_1.handleHttp)(res, "ERROR_GET_REVENUEsss", e_3);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
@@ -156,29 +159,13 @@ var postRevenueWorkingDay = function (req, res) { return __awaiter(void 0, void 
                     dataFiles = JSON.parse(req.body.dataFiles);
                 }
                 formattotalAmount = 0;
-                console.log('valueOrder.amount', valueRevenue);
+                console.log('valueOrder.amount', valueRevenue.datos);
+                console.log('valueOrder user', user);
                 // console.log('valueRevenue?.totalAmount', valueRevenue?.totalAmount)
                 // res.send(valueRevenue);
                 if ((valueRevenue === null || valueRevenue === void 0 ? void 0 : valueRevenue.totalAmount) !== null && (valueRevenue === null || valueRevenue === void 0 ? void 0 : valueRevenue.totalAmount) !== undefined) {
                     valueRevenue.totalAmount = Number(valueRevenue === null || valueRevenue === void 0 ? void 0 : valueRevenue.totalAmount.toString().replace(/[$,]/g, ''));
                 }
-                // valueRevenue
-                // const revenue: Revenue = {
-                //   amountTransfer?: number;
-                //   amountPos?: number;
-                //   amountCash?: number;
-                //   amountOther?: number;
-                //   amountSistem?: number;
-                //   description?: String;
-                //   turn?: String;
-                //   cashFund?: number;
-                //   amountTurn: number;
-                //   totalAmount: number;
-                //   users?: string;
-                //   workingDay?: string;
-                //   files?: any;
-                //   type: 'other' | 'closing';
-                // }
                 valueRevenue.type = 'closure';
                 reqRevenue = {
                     id: valueRevenue._id,
@@ -187,7 +174,10 @@ var postRevenueWorkingDay = function (req, res) { return __awaiter(void 0, void 
                     users: user === null || user === void 0 ? void 0 : user._id,
                     dataFiles: dataFiles,
                     files: files,
-                    type: valueRevenue.type
+                    type: valueRevenue.type,
+                    noteValid: valueRevenue.noteValid,
+                    validAdmin: valueRevenue.validAdmin,
+                    usersAdmin: user === null || user === void 0 ? void 0 : user._id
                 };
                 return [4 /*yield*/, (0, revenue_1.insertOrUpdateRevenueWorkingDay)(reqRevenue)];
             case 1:

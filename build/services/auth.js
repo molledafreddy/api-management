@@ -44,7 +44,7 @@ var user_1 = __importDefault(require("../models/user"));
 var bcrypt_handle_1 = require("../utils/bcrypt.handle");
 var jwt_handle_1 = require("../utils/jwt.handle");
 var registerNewUser = function (_a) {
-    var email = _a.email, password = _a.password, name = _a.name;
+    var email = _a.email, password = _a.password, name = _a.name, role = _a.role;
     return __awaiter(void 0, void 0, void 0, function () {
         var checkIs, passHash, registerNewUser;
         return __generator(this, function (_b) {
@@ -57,7 +57,7 @@ var registerNewUser = function (_a) {
                     return [4 /*yield*/, (0, bcrypt_handle_1.encrypt)(password)];
                 case 2:
                     passHash = _b.sent();
-                    return [4 /*yield*/, user_1.default.create({ email: email, password: passHash, name: name })];
+                    return [4 /*yield*/, user_1.default.create({ email: email, password: passHash, name: name, role: role })];
                 case 3:
                     registerNewUser = _b.sent();
                     return [2 /*return*/, registerNewUser];

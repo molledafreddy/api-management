@@ -22,7 +22,7 @@ var checkJwt = function (req, res, next) {
     catch (e) {
         console.log({ e: e });
         res.status(400);
-        res.send("SESSION_NO_VALIDA");
+        res.send(["SESSION_NO_VALIDA"]);
     }
 };
 exports.checkJwt = checkJwt;

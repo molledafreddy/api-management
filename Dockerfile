@@ -18,6 +18,8 @@ COPY package*.json ./
 
 COPY . .
 
+ENV DB_URI=mongodb+srv://molledafreddy:freddy2..@cluster0.1e16p.mongodb.net/app-manager
+
 RUN npm install
 
 # ENV NODE_ENV=production

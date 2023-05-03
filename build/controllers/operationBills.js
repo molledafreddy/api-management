@@ -126,18 +126,20 @@ var postOperationBills = function (req, res) { return __awaiter(void 0, void 0, 
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 5, , 6]);
-                console.log('req', req);
                 user = req.user, body = req.body, files = req.files;
                 body.users = "".concat(user === null || user === void 0 ? void 0 : user._id);
                 valueOperation = JSON.parse(req.body.data);
                 // res.send(body);
-                // console.log('req.body', req.body.dataFiles)
-                if (req.body.paymentHasEgress !== undefined) {
+                console.log('req.body', req);
+                paymentHasEgress = [];
+                if (req.body.paymentHasEgress !== 'undefined') {
                     paymentHasEgress = JSON.parse(req.body.paymentHasEgress);
                 }
+                // console.log('req.body.dataFiles', req.body.dataFiles)
                 if (req.body.dataFiles !== undefined) {
                     dataFiles = JSON.parse(req.body.dataFiles);
                 }
+                console.log('files', files);
                 now = new Date();
                 formatoMap = {
                     dd: now.getDate(),
@@ -168,6 +170,7 @@ var postOperationBills = function (req, res) { return __awaiter(void 0, void 0, 
                     files: files,
                     dataFiles: dataFiles,
                 };
+                console.log('egress', reqOperation);
                 if (!!valueOperation._id) return [3 /*break*/, 2];
                 return [4 /*yield*/, (0, operationBill_1.insertOperationBills)(reqOperation)];
             case 1:

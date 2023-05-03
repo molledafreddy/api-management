@@ -187,6 +187,7 @@ var searchEgress = function (egress) { return __awaiter(void 0, void 0, void 0, 
                                 },
                             },
                         },
+                        { $sort: { 'createdAt': -1 } },
                         { $skip: (page - 1) * limit || 0 },
                         { $limit: Number(limit) },
                     ])];
@@ -283,6 +284,7 @@ var searchOrderPaitOut = function (order) { return __awaiter(void 0, void 0, voi
                                 },
                             },
                         },
+                        { $sort: { 'createdAt': -1 } },
                         { $skip: (page - 1) * limit || 0 },
                         { $limit: Number(limit) },
                     ])];

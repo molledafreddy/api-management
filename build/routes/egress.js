@@ -25,4 +25,4 @@ exports.router = router;
 // checkJwt, checkRoleAuth(['User', 'admin']),
 // router.post('/',multerMilddleware, checkJwt, checkRoleAuth(['User', 'admin']), postOrder);
 // checkJwt, checkRoleAuth(['User', 'admin']),
-router.post('/search', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'admin']), egress_1.searchEgress);
+router.post('/search', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), egress_1.searchEgress);

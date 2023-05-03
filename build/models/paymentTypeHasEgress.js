@@ -6,6 +6,10 @@ var paymentTypeHasEgressSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
+    originMoney: {
+        type: String,
+        required: false
+    },
     payments: [{
             type: mongoose_1.Schema.Types.ObjectId,
             ref: 'PaymentType'

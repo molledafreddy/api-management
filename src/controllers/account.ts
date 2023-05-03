@@ -31,9 +31,11 @@ const postAccount = async (req: RequestExt, res: Response) => {
   try {
       const { user, body } = req;
       body.users = `${user?._id}`;
+      console.log('body', body)
       const  responseOrder = await insertAccount(body);
       res.send(responseOrder);
   } catch (e) {
+    console.log('e', e)
       handleHttp(res, "ERROR_POST_ACCOUNTS", e)
   }
 }

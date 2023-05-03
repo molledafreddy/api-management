@@ -46,7 +46,25 @@ var OrderSchema = new mongoose_1.Schema({
     providers: [{
             type: mongoose_1.Schema.Types.ObjectId,
             ref: 'providers'
-        }]
+        }],
+    validAdmin: {
+        type: String,
+        enum: ["Verificado", "por_verificar", "con_error"],
+        required: false,
+    },
+    noteValid: {
+        type: String,
+        required: false
+    },
+    usersAdmin: [{
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'users',
+            required: false
+        }],
+    validDate: {
+        type: Date,
+        required: false
+    },
 }, {
     timestamps: true,
     versionKey: false

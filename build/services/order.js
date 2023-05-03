@@ -90,6 +90,7 @@ var getOrder = function (_id) { return __awaiter(void 0, void 0, void 0, functio
                         { $lookup: { from: 'egresses', localField: '_id', foreignField: 'orders', as: 'egress' } },
                         { $lookup: { from: 'logisticorders', localField: '_id', foreignField: 'orders', as: 'logisticOrder' } },
                         { $lookup: { from: "providers", localField: "providers", foreignField: "_id", as: "providers" }, },
+                        { $sort: { 'createdAt': -1 } },
                     ])];
             case 2:
                 responseItem = _a.sent();
@@ -214,6 +215,7 @@ var searchOrderDetail = function (order) { return __awaiter(void 0, void 0, void
                                 },
                             },
                         },
+                        { $sort: { 'createdAt': -1 } },
                         { $skip: (page - 1) * limit || 0 },
                         { $limit: Number(limit) },
                     ])];
@@ -239,7 +241,7 @@ var searchOrderDetail = function (order) { return __awaiter(void 0, void 0, void
 }); };
 exports.searchOrderDetail = searchOrderDetail;
 var searchOrderPaitOut = function (order) { return __awaiter(void 0, void 0, void 0, function () {
-    var ObjectId, filter, _id, status, page, limit, response, myArray, myArray2, now, formatoMap, responseSum, responseItem, e_2;
+    var ObjectId, filter, _id, status, page, limit, response, myArray, myArray2, now, formatoMap, responseSum, responseItem, datapayment_1, res, e_2;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -261,12 +263,13 @@ var searchOrderPaitOut = function (order) { return __awaiter(void 0, void 0, voi
                     hasNextPage: true,
                     prevPage: null,
                     nextPage: 0,
-                    sum: 0
+                    sum: 0,
+                    paymentHasEgress: []
                 };
                 if (order.status !== '') {
                     filter.status = status;
                 }
-                if (((order.startDate !== 'null' && order.startDate !== ''))
+                if ((order.startDate !== 'null' && order.startDate !== '')
                     && (order.endDate !== 'null' && order.endDate !== '')) {
                     console.log('imgreso a la validacion fecha', order.startDate);
                     myArray = order === null || order === void 0 ? void 0 : order.startDate.split("/");
@@ -277,30 +280,44 @@ var searchOrderPaitOut = function (order) { return __awaiter(void 0, void 0, voi
                     };
                 }
                 else {
+                    console.log('ingrso al else');
                     now = new Date();
                     formatoMap = {
                         dd: now.getDate(),
                         mm: now.getMonth(),
                         yyyy: now.getFullYear()
                     };
+                    // var dateStr = new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,0,0,0,0);
+                    // var nextDate = new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,23,59,59, 999);
                     filter.paymentDate = {
                         $gte: new Date(formatoMap.yyyy, formatoMap.mm, formatoMap.dd, 0, 0, 0, 0),
                         $lt: new Date(formatoMap.yyyy, formatoMap.mm, formatoMap.dd, 23, 59, 59, 999)
                     };
+                    // const formatoMap = {
+                    //     dd: now.getDate(),
+                    //     mm: now.getMonth(),
+                    //     yyyy: now.getFullYear()
+                    // };
+                    // filter.paymentDate = {
+                    //     $gte: new Date(formatoMap.yyyy, formatoMap.mm, formatoMap.dd-2,0,0,0,0), 
+                    //     $lt: new Date(formatoMap.yyyy,formatoMap.mm, formatoMap.dd+1,23,59,59, 999)
+                    // }
                 }
+                console.log('filter', filter);
                 _b.label = 1;
             case 1:
-                _b.trys.push([1, 4, , 5]);
+                _b.trys.push([1, 7, , 8]);
                 responseSum = [];
                 return [4 /*yield*/, order_1.default.aggregate([
                         { $match: filter },
-                        { $group: { _id: null, sum: { $sum: "$amountPaid" } } }
+                        { $group: { _id: null, sum: { $sum: "$amountPaid" } } },
                     ])];
             case 2:
                 responseSum = _b.sent();
                 return [4 /*yield*/, order_1.default.aggregate([
                         { $match: filter },
                         { $lookup: { from: 'egresses', localField: '_id', foreignField: 'orders', as: 'egress' } },
+                        // { $lookup: { from:'paymentTypeHasEgress', localField: 'egress', foreignField: 'egress._id',as:'paymentTypeHasEgress'}},
                         { $lookup: { from: "providers", localField: "providers", foreignField: "_id", as: "providers" }, },
                         {
                             $setWindowFields: {
@@ -309,30 +326,86 @@ var searchOrderPaitOut = function (order) { return __awaiter(void 0, void 0, voi
                                 },
                             },
                         },
+                        { $sort: { 'createdAt': -1 } },
                         { $skip: (page - 1) * limit || 0 },
                         { $limit: Number(limit) },
                     ])];
             case 3:
                 responseItem = _b.sent();
-                if (Object.entries(responseItem).length > 0) {
-                    response.docs = responseItem;
-                    response.sum = (_a = responseSum[0]) === null || _a === void 0 ? void 0 : _a.sum;
-                    response.limit = limit;
-                    response.totalPages = Math.ceil(responseItem[0].totalDocs / limit);
-                    response.page = (page - 1) * limit || 0;
-                    response.prevPage = page;
-                    response.nextPage = (page + 1);
-                }
-                return [2 /*return*/, response];
+                if (!(Object.entries(responseItem).length > 0)) return [3 /*break*/, 6];
+                datapayment_1 = [];
+                return [4 /*yield*/, (responseItem === null || responseItem === void 0 ? void 0 : responseItem.forEach(function (element) { return __awaiter(void 0, void 0, void 0, function () {
+                        var _a;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
+                                case 0: return [4 /*yield*/, datapayment_1.push((_a = element === null || element === void 0 ? void 0 : element.egress[0]) === null || _a === void 0 ? void 0 : _a._id)];
+                                case 1:
+                                    _b.sent();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); }))];
             case 4:
+                _b.sent();
+                return [4 /*yield*/, paymentTypeHasEgress_1.default.find({ egress: { $in: datapayment_1 } })];
+            case 5:
+                res = _b.sent();
+                response.docs = responseItem;
+                response.sum = (_a = responseSum[0]) === null || _a === void 0 ? void 0 : _a.sum;
+                response.limit = limit;
+                response.paymentHasEgress = res;
+                response.totalPages = Math.ceil(responseItem[0].totalDocs / limit);
+                response.page = (page - 1) * limit || 0;
+                response.prevPage = page;
+                response.nextPage = (page + 1);
+                _b.label = 6;
+            case 6: return [2 /*return*/, response];
+            case 7:
                 e_2 = _b.sent();
                 console.log(e_2);
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
+                return [3 /*break*/, 8];
+            case 8: return [2 /*return*/];
         }
     });
 }); };
 exports.searchOrderPaitOut = searchOrderPaitOut;
+var getDinamicpayment = function (data) { return __awaiter(void 0, void 0, void 0, function () {
+    var datapayment, valueD;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                datapayment = [];
+                if (!(Object.entries(data).length > 0)) return [3 /*break*/, 2];
+                return [4 /*yield*/, (data === null || data === void 0 ? void 0 : data.forEach(function (element) { return __awaiter(void 0, void 0, void 0, function () {
+                        var responseItem;
+                        var _a;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
+                                case 0: return [4 /*yield*/, paymentTypeHasEgress_1.default.find({ egress: (_a = element === null || element === void 0 ? void 0 : element.egress[0]) === null || _a === void 0 ? void 0 : _a._id })];
+                                case 1:
+                                    responseItem = _b.sent();
+                                    console.log('element result');
+                                    console.log('element result');
+                                    return [4 /*yield*/, datapayment.push(responseItem)
+                                        // console.log('element result', datapayment)
+                                        // return datapayment;
+                                    ];
+                                case 2:
+                                    _b.sent();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); }))];
+            case 1:
+                valueD = _a.sent();
+                console.log('element result datapayment', datapayment);
+                _a.label = 2;
+            case 2: 
+            // console.log('datapayment getDinamicpayment',datapayment )
+            return [2 /*return*/, datapayment];
+        }
+    });
+}); };
 var getOrderDetail = function (id) { return __awaiter(void 0, void 0, void 0, function () {
     var filtro, now, formatoMap, dateStr, nextDate, responseItem, e_3;
     return __generator(this, function (_a) {
@@ -471,7 +544,7 @@ var insertOrUpdateOrder = function (order) { return __awaiter(void 0, void 0, vo
                 dataFiles = [];
                 // console.log('archivos', operation.files)
                 if (Object.keys(order.files).length > 0) {
-                    console.log('ingreso tiene archivos');
+                    // console.log('ingreso tiene archivos');
                     (_a = order.files) === null || _a === void 0 ? void 0 : _a.forEach(function (element) {
                         // console.log('element',element)
                         dataFiles.push({
@@ -488,12 +561,12 @@ var insertOrUpdateOrder = function (order) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, updateOrder(order._id, resulData._id, order)];
             case 6:
                 resultUpdate = _b.sent();
+                console.log('resultUpdate', resultUpdate);
                 return [2 /*return*/, resultUpdate];
             case 7: return [4 /*yield*/, insertOrder(resulData._id, order)];
             case 8:
                 resultData = _b.sent();
                 return [2 /*return*/, resultData];
-            case 9: return [2 /*return*/, order];
         }
     });
 }); };
@@ -537,10 +610,6 @@ var createEgress = function (orderId, data) { return __awaiter(void 0, void 0, v
             case 1:
                 validEgress = _f.sent();
                 if (!(Object.keys(validEgress).length == 0)) return [3 /*break*/, 7];
-                console.log("ingreso se creara un abono");
-                console.log("ingreso se creara un abono");
-                console.log("ingreso se creara un abono");
-                console.log("ingreso se creara un abono");
                 dataEgress = {
                     invoiceNumber: (_a = data.egress) === null || _a === void 0 ? void 0 : _a.invoiceNumber,
                     amount: (_b = data.egress) === null || _b === void 0 ? void 0 : _b.amount,
@@ -570,6 +639,7 @@ var createEgress = function (orderId, data) { return __awaiter(void 0, void 0, v
                             payments: item.payments,
                             egress: responseInsertE_1._id,
                             paymentAmount: item.paymentAmount,
+                            originMoney: item === null || item === void 0 ? void 0 : item.originMoney,
                         };
                         dataPayment_1.push(dataPaymentTypeHasEgress);
                     }))];
@@ -578,7 +648,6 @@ var createEgress = function (orderId, data) { return __awaiter(void 0, void 0, v
                 return [4 /*yield*/, paymentTypeHasEgress_1.default.insertMany(dataPayment_1)];
             case 5:
                 responseInsertP = _f.sent();
-                console.log('responseInsertP', responseInsertP);
                 _f.label = 6;
             case 6: return [2 /*return*/, dataEgress];
             case 7: return [2 /*return*/];
@@ -603,12 +672,9 @@ var updateOrder = function (id, idWorkingDay, data) { return __awaiter(void 0, v
     var responseItem, resultGet, dataLogistic, responseInsert, validEgress, resultEgress;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                console.log('updateOrder', data);
-                return [4 /*yield*/, order_1.default.findOneAndUpdate({ _id: id }, data, { new: true })];
+            case 0: return [4 /*yield*/, order_1.default.findOneAndUpdate({ _id: id }, data, { new: true })];
             case 1:
                 responseItem = _a.sent();
-                console.log('responseItem actualizacion de orden', responseItem);
                 return [4 /*yield*/, getOrder(id)];
             case 2:
                 resultGet = _a.sent();
@@ -629,7 +695,7 @@ var updateOrder = function (id, idWorkingDay, data) { return __awaiter(void 0, v
                 return [4 /*yield*/, updateEgress(id, data)];
             case 5:
                 resultEgress = _a.sent();
-                return [2 /*return*/, resultEgress];
+                return [3 /*break*/, 7];
             case 6:
                 // console.log('ingreso else debe crear egreseo')
                 createEgress(id, data);
@@ -644,19 +710,16 @@ var updateOrder = function (id, idWorkingDay, data) { return __awaiter(void 0, v
 }); };
 var updateEgress = function (orderId, data) { return __awaiter(void 0, void 0, void 0, function () {
     var validEgress, dataEgress, infoFile_1, responseInsertE, deleteI, resultPayments_2, dataPayment_2, responseInsertP;
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    return __generator(this, function (_l) {
-        switch (_l.label) {
-            case 0: return [4 /*yield*/, getEgress(orderId)];
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    return __generator(this, function (_k) {
+        switch (_k.label) {
+            case 0: return [4 /*yield*/, getEgress(orderId)
+                // console.log('data orden', data)
+                // console.log('validEgress inreso a la actualizacion del ingreso',orderId, validEgress)
+            ];
             case 1:
-                validEgress = _l.sent();
-                console.log('data orden', data);
-                console.log('validEgress inreso a la actualizacion del ingreso', orderId, validEgress);
+                validEgress = _k.sent();
                 if (!(Object.keys(validEgress).length > 0)) return [3 /*break*/, 14];
-                // console.log("ingreso se creara un abono")
-                // console.log("ingreso se creara un abono")
-                console.log("ingreso se creara un abono data?.dataFiles", data === null || data === void 0 ? void 0 : data.dataFiles);
-                console.log("ingreso se creara un abono data?.files", data === null || data === void 0 ? void 0 : data.files);
                 dataEgress = {
                     invoiceNumber: (_a = data.egress) === null || _a === void 0 ? void 0 : _a.invoiceNumber,
                     orders: orderId,
@@ -665,7 +728,6 @@ var updateEgress = function (orderId, data) { return __awaiter(void 0, void 0, v
                     type: 'orders',
                     paymentDate: data === null || data === void 0 ? void 0 : data.paymentDate,
                 };
-                console.log('modelo egreso', dataEgress);
                 infoFile_1 = [];
                 if (!(Object.keys(data === null || data === void 0 ? void 0 : data.dataFiles).length > 0 && Object.keys(data === null || data === void 0 ? void 0 : data.files).length > 0)) return [3 /*break*/, 4];
                 // infoFile.push(data?.files);
@@ -680,7 +742,7 @@ var updateEgress = function (orderId, data) { return __awaiter(void 0, void 0, v
                         });
                     }))];
             case 2:
-                _l.sent();
+                _k.sent();
                 return [4 /*yield*/, ((_c = data === null || data === void 0 ? void 0 : data.files) === null || _c === void 0 ? void 0 : _c.forEach(function (element) {
                         infoFile_1.push({
                             filename: element.filename,
@@ -691,7 +753,7 @@ var updateEgress = function (orderId, data) { return __awaiter(void 0, void 0, v
                         });
                     }))];
             case 3:
-                _l.sent();
+                _k.sent();
                 console.log('infoFiles', infoFile_1);
                 // infoFile.push(data?.files as any);
                 dataEgress.files = infoFile_1;
@@ -714,26 +776,22 @@ var updateEgress = function (orderId, data) { return __awaiter(void 0, void 0, v
                         });
                     }))];
             case 6:
-                _l.sent();
+                _k.sent();
                 dataEgress.files = infoFile_1;
-                _l.label = 7;
-            case 7:
-                console.log("dataEgress", dataEgress);
-                return [4 /*yield*/, egress_1.default.findOneAndUpdate({ _id: (_e = data === null || data === void 0 ? void 0 : data.egress) === null || _e === void 0 ? void 0 : _e._id }, dataEgress, { new: true })];
+                _k.label = 7;
+            case 7: return [4 /*yield*/, egress_1.default.findOneAndUpdate({ _id: (_e = data === null || data === void 0 ? void 0 : data.egress) === null || _e === void 0 ? void 0 : _e._id }, dataEgress, { new: true })];
             case 8:
-                responseInsertE = _l.sent();
-                console.log('resultado egresos', responseInsertE);
+                responseInsertE = _k.sent();
                 return [4 /*yield*/, paymentTypeHasEgress_1.default.deleteMany({ egress: (_f = data === null || data === void 0 ? void 0 : data.egress) === null || _f === void 0 ? void 0 : _f._id })];
             case 9:
-                deleteI = _l.sent();
-                console.log('data.egress?.paymentHasEgress', (_g = data.egress) === null || _g === void 0 ? void 0 : _g.paymentHasEgress);
-                if (!(Object.keys((_h = data.egress) === null || _h === void 0 ? void 0 : _h.paymentHasEgress).length > 0)) return [3 /*break*/, 13];
+                deleteI = _k.sent();
+                if (!(Object.keys((_g = data.egress) === null || _g === void 0 ? void 0 : _g.paymentHasEgress).length > 0)) return [3 /*break*/, 13];
                 return [4 /*yield*/, (0, paymentType_1.getPaymentTypes)()];
             case 10:
-                resultPayments_2 = _l.sent();
+                resultPayments_2 = _k.sent();
                 if (!(Object.keys(resultPayments_2).length > 0)) return [3 /*break*/, 13];
                 dataPayment_2 = [];
-                return [4 /*yield*/, ((_k = (_j = data.egress) === null || _j === void 0 ? void 0 : _j.paymentHasEgress) === null || _k === void 0 ? void 0 : _k.forEach(function (item) {
+                return [4 /*yield*/, ((_j = (_h = data.egress) === null || _h === void 0 ? void 0 : _h.paymentHasEgress) === null || _j === void 0 ? void 0 : _j.forEach(function (item) {
                         var _a;
                         for (var i = 0; i < resultPayments_2.length; i++) {
                             var type = resultPayments_2[i];
@@ -746,23 +804,23 @@ var updateEgress = function (orderId, data) { return __awaiter(void 0, void 0, v
                             payments: item.payments,
                             egress: (_a = data === null || data === void 0 ? void 0 : data.egress) === null || _a === void 0 ? void 0 : _a._id,
                             paymentAmount: item.paymentAmount,
+                            originMoney: item === null || item === void 0 ? void 0 : item.originMoney,
                         };
                         dataPayment_2.push(dataPaymentTypeHasEgress);
                     }))];
             case 11:
-                _l.sent();
+                _k.sent();
                 return [4 /*yield*/, paymentTypeHasEgress_1.default.insertMany(dataPayment_2)];
             case 12:
-                responseInsertP = _l.sent();
-                console.log('responseInsertP', responseInsertP);
-                _l.label = 13;
+                responseInsertP = _k.sent();
+                _k.label = 13;
             case 13: return [2 /*return*/, dataEgress];
             case 14:
                 console.log(' n consigio egreso');
                 console.log(' n consigio egreso');
                 console.log(' n consigio egreso');
                 console.log(' n consigio egreso');
-                _l.label = 15;
+                _k.label = 15;
             case 15: return [2 /*return*/];
         }
     });

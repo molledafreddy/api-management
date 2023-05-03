@@ -63,7 +63,7 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
         body.users = `${user?._id}`;
         var valueOperation = JSON.parse(req.body.data)
         // res.send(body);
-        // console.log('req.body', req.body)
+        console.log('req.body', req)
         var paymentHasEgress = [];
         if (req.body.paymentHasEgress !== 'undefined') {
           paymentHasEgress = JSON.parse(req.body.paymentHasEgress);
@@ -110,8 +110,8 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
           dataFiles: dataFiles as any,
         }
 
-        // console.log('egress', reqOperation);
-        // // res.send(reqOperation);
+        console.log('egress', reqOperation);
+        // res.send(reqOperation);
         if (!valueOperation._id) {
           // console.log('llego al post')
           const  responseOrder = await insertOperationBills(reqOperation);

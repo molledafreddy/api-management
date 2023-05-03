@@ -73,7 +73,7 @@ var checkRoleAuth = function (roles) { return function (req, res, next) { return
                 e_1 = _a.sent();
                 console.log({ e: e_1 });
                 res.status(400);
-                res.send("SESSION_NO_VALIDA");
+                res.send(["SESSION_NO_VALIDA"]);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

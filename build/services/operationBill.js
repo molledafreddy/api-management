@@ -145,7 +145,8 @@ var createEgress = function (operationId, data) { return __awaiter(void 0, void 
                         var dataPaymentTypeHasEgress = {
                             payments: item.payments,
                             egress: responseInsertE_1._id,
-                            paymentAmount: item.paymentAmount,
+                            paymentAmount: item === null || item === void 0 ? void 0 : item.paymentAmount,
+                            originMoney: item === null || item === void 0 ? void 0 : item.originMoney,
                         };
                         dataPayment_1.push(dataPaymentTypeHasEgress);
                     }))];
@@ -258,7 +259,8 @@ var updateEgress = function (operationId, data) { return __awaiter(void 0, void 
                         var dataPaymentTypeHasEgress = {
                             payments: item.payments,
                             egress: (_a = data === null || data === void 0 ? void 0 : data.egress) === null || _a === void 0 ? void 0 : _a._id,
-                            paymentAmount: item.paymentAmount,
+                            paymentAmount: item === null || item === void 0 ? void 0 : item.paymentAmount,
+                            originMoney: item === null || item === void 0 ? void 0 : item.originMoney,
                         };
                         dataPayment_2.push(dataPaymentTypeHasEgress);
                     }))];
@@ -335,6 +337,7 @@ var getOperationBills = function (query) { return __awaiter(void 0, void 0, void
                                 },
                             },
                         },
+                        { $sort: { 'createdAt': -1 } },
                         { $skip: (page - 1) * limit || 0 },
                         { $limit: Number(limit) },
                     ])];
@@ -399,6 +402,7 @@ var getOperationBill = function (id) { return __awaiter(void 0, void 0, void 0, 
                         { $match: valid },
                         // {$match: { _id: new ObjectId("63f7ebee0e2be4525a156238") }},
                         { $lookup: { from: 'egresses', localField: '_id', foreignField: 'operationBills', as: 'egress' } },
+                        { $sort: { 'createdAt': -1 } },
                     ])];
             case 2:
                 responseItem = _a.sent();
@@ -426,7 +430,7 @@ var updateOperationBills = function (id, operation) { return __awaiter(void 0, v
             case 0:
                 value = validPaidOperation(operation);
                 if (value != "VALID_SUCCESS") {
-                    return [2 /*return*/, value];
+                    return [2 /*return*/, [value]];
                 }
                 dataFiles = [];
                 if (Object.keys(operation.files).length > 0) {
@@ -448,7 +452,9 @@ var updateOperationBills = function (id, operation) { return __awaiter(void 0, v
                 return [4 /*yield*/, updateEgress(id, operation)];
             case 2:
                 resultEgress = _b.sent();
-                return [2 /*return*/, resultEgress];
+                // return resultEgress;
+                // }
+                return [2 /*return*/, responseInsert];
         }
     });
 }); };

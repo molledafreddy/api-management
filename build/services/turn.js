@@ -46,39 +46,45 @@ var mongoose_1 = __importDefault(require("mongoose"));
 // import {  } from "/workingDay";}
 var ObjectId = mongoose_1.default.Types.ObjectId;
 var insertTurn = function (turn) { return __awaiter(void 0, void 0, void 0, function () {
-    var resulData, status, convertFechaStart, resultStart, dataHoraStart, horaStart, HStar, MNStar, SStar, dataFechaStart, fechaStart, YStart, MStart, DStart, dateStr, convertFechaEnd, resultEnd, dataHoraEnd, horaEnd, HEnd, MNEnd, SEnd, dataFechaEnd, fechaEnd, YEnd, MEnd, DEnd, dateEnd, resultDate, dataTurn, responseUpdate, validTurnR, dataTurn, responseInsert;
+    var resulData, status, dateStr, dateEnd, convertFechaStart, resultStart, dataHoraStart, horaStart, HStar, MNStar, SStar, dataFechaStart, fechaStart, YStart, MStart, DStart, convertFechaEnd, resultEnd, dataHoraEnd, horaEnd, HEnd, MNEnd, SEnd, dataFechaEnd, fechaEnd, YEnd, MEnd, DEnd, resultDate, dataTurn, responseUpdate, validTurnR, dataTurn, responseInsert;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 resulData = [];
                 status = turn.status || '';
-                convertFechaStart = turn.startDate.toString();
-                resultStart = convertFechaStart.split(" ");
-                dataHoraStart = resultStart[1];
-                horaStart = dataHoraStart.split(":");
-                HStar = Number(horaStart[0]);
-                MNStar = Number(horaStart[1]);
-                SStar = Number(horaStart[2]);
-                dataFechaStart = resultStart[0];
-                fechaStart = dataFechaStart.split("/");
-                YStart = Number(fechaStart[2]);
-                MStart = Number(fechaStart[0]);
-                DStart = Number(fechaStart[1]);
-                dateStr = new Date(YStart, MStart - 1, DStart, HStar - 3, MNStar, SStar, 0);
-                convertFechaEnd = (_a = turn === null || turn === void 0 ? void 0 : turn.endDate) === null || _a === void 0 ? void 0 : _a.toString();
-                resultEnd = convertFechaEnd === null || convertFechaEnd === void 0 ? void 0 : convertFechaEnd.split(" ");
-                dataHoraEnd = resultEnd[1];
-                horaEnd = dataHoraEnd.split(":");
-                HEnd = Number(horaEnd[0]);
-                MNEnd = Number(horaEnd[1]);
-                SEnd = Number(horaEnd[2]);
-                dataFechaEnd = resultEnd[0];
-                fechaEnd = dataFechaEnd.split("/");
-                YEnd = Number(fechaEnd[2]);
-                MEnd = Number(fechaEnd[0]);
-                DEnd = Number(fechaEnd[1]);
-                dateEnd = new Date(YEnd, MEnd - 1, DEnd, HEnd - 3, MNEnd, SEnd, 0);
+                dateStr = new Date();
+                dateEnd = new Date();
+                if (turn.startDate !== undefined) {
+                    convertFechaStart = turn.startDate.toString();
+                    resultStart = convertFechaStart.split(" ");
+                    dataHoraStart = resultStart[1];
+                    horaStart = dataHoraStart.split(":");
+                    HStar = Number(horaStart[0]);
+                    MNStar = Number(horaStart[1]);
+                    SStar = Number(horaStart[2]);
+                    dataFechaStart = resultStart[0];
+                    fechaStart = dataFechaStart.split("/");
+                    YStart = Number(fechaStart[2]);
+                    MStart = Number(fechaStart[0]);
+                    DStart = Number(fechaStart[1]);
+                    dateStr = new Date(YStart, MStart - 1, DStart, HStar - 3, MNStar, SStar, 0);
+                }
+                if (turn.endDate !== undefined) {
+                    convertFechaEnd = (_a = turn === null || turn === void 0 ? void 0 : turn.endDate) === null || _a === void 0 ? void 0 : _a.toString();
+                    resultEnd = convertFechaEnd === null || convertFechaEnd === void 0 ? void 0 : convertFechaEnd.split(" ");
+                    dataHoraEnd = resultEnd[1];
+                    horaEnd = dataHoraEnd.split(":");
+                    HEnd = Number(horaEnd[0]);
+                    MNEnd = Number(horaEnd[1]);
+                    SEnd = Number(horaEnd[2]);
+                    dataFechaEnd = resultEnd[0];
+                    fechaEnd = dataFechaEnd.split("/");
+                    YEnd = Number(fechaEnd[2]);
+                    MEnd = Number(fechaEnd[0]);
+                    DEnd = Number(fechaEnd[1]);
+                    dateEnd = new Date(YEnd, MEnd - 1, DEnd, HEnd - 3, MNEnd, SEnd, 0);
+                }
                 return [4 /*yield*/, (0, workingDay_1.getWorkingForDate)()];
             case 1:
                 resultDate = _b.sent();
@@ -253,6 +259,7 @@ var searchTurnForUser = function (turn) { return __awaiter(void 0, void 0, void 
                                 },
                             },
                         },
+                        { $sort: { 'createdAt': -1 } },
                         { $skip: (page - 1) * limit || 0 },
                         { $limit: Number(limit) },
                     ])];
@@ -308,6 +315,7 @@ var getTurn = function (id) { return __awaiter(void 0, void 0, void 0, function 
                         { $match: valid },
                         { $lookup: { from: 'users', localField: 'users', foreignField: '_id', as: 'users' } },
                         { $lookup: { from: 'workingdays', localField: 'workingDay', foreignField: '_id', as: 'workingDay' } },
+                        { $sort: { 'createdAt': -1 } },
                     ])];
             case 2:
                 responseItem = _a.sent();
@@ -381,6 +389,3 @@ var deleteCar = function (id) { return __awaiter(void 0, void 0, void 0, functio
     });
 }); };
 exports.deleteCar = deleteCar;
-function ISODate(arg0) {
-    throw new Error("Function not implemented.");
-}

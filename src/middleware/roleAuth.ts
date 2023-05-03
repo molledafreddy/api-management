@@ -7,11 +7,13 @@ import userModel from "../models/user"
 
 const checkRoleAuth = (roles: string[] ) => async (req: Request, res: Response, next: NextFunction) => {
     try {
-        
         const jwtUser = req.headers.authorization || null;
         const jwt = jwtUser?.split(' ').pop() // ['Bearer','11111']
+        console.log('jwtjwt', jwt)
+        console.log('jwt', jwt)
         //  const isUser = verifyToken(`${jwt}`) as { id: string};
         const tokenData = await verifyToken(`${jwt}`) as { _id: string, role: string};
+        console.log('tokenData', tokenData)
         const userData = await userModel.findById(tokenData._id);
         if ( roles.findIndex(value => value === userData?.role) != -1) {
             console.log('ingreso tienes permisos')

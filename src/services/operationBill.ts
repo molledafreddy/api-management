@@ -100,7 +100,8 @@ const createEgress = async (operationId: string, data: RequestOperationBills) =>
                         const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
                             payments: item.payments,
                             egress: responseInsertE._id as string,
-                            paymentAmount: item.paymentAmount ,
+                            paymentAmount: item?.paymentAmount,
+                            originMoney: item?.originMoney,
                         }
                         
                         dataPayment.push(dataPaymentTypeHasEgress)
@@ -225,7 +226,8 @@ const updateEgress = async (operationId: string, data: RequestOperationBills) =>
                         const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
                             payments: item.payments,
                             egress: data?.egress?._id as string,
-                            paymentAmount: item.paymentAmount ,
+                            paymentAmount: item?.paymentAmount,
+                            originMoney: item?.originMoney,
                         }
                         
                         dataPayment.push(dataPaymentTypeHasEgress)
@@ -235,19 +237,6 @@ const updateEgress = async (operationId: string, data: RequestOperationBills) =>
                 const responseInsertP = await paymentTypeHasEgressModel.insertMany(dataPayment);
                 console.log('responseInsertP', responseInsertP)
             }
-
-            // let dataPayment: any = [];
-            // await data.egress?.paymentHasEgress?.forEach(
-            //     (item: any) => {
-            //     const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
-            //         payments: item.payments,
-            //         egress: data?.egress?._id as string,
-            //         paymentAmount: item.paymentAmount,
-            //     }
-            //     dataPayment.push(dataPaymentTypeHasEgress)
-            // });
-            // const resulttype = await paymentTypeHasEgressModel.insertMany(dataPayment);
-            // console.log('resulttype', resulttype)
         }
         // return dataEgress; 
     }

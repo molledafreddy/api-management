@@ -188,6 +188,10 @@ var updateRevenue = function (revenueId, revenue) { return __awaiter(void 0, voi
                     amountTurn: revenue.revenue.totalAmount,
                     totalAmount: revenue.revenue.totalAmount,
                     type: revenue.revenue.type,
+                    validAdmin: revenue.validAdmin,
+                    noteValid: revenue.noteValid === undefined ? '' : revenue.noteValid,
+                    usersAdmin: revenue.usersAdmin,
+                    validDate: new Date()
                 };
                 infoFile_1 = [];
                 if (!(Object.keys(revenue === null || revenue === void 0 ? void 0 : revenue.dataFiles).length > 0 && Object.keys(revenue === null || revenue === void 0 ? void 0 : revenue.files).length > 0)) return [3 /*break*/, 4];
@@ -376,6 +380,7 @@ var getRevenue = function (id) { return __awaiter(void 0, void 0, void 0, functi
                         { $lookup: { from: 'users', localField: 'users', foreignField: '_id', as: 'users' } },
                         { $lookup: { from: 'workingdays', localField: 'workingDay', foreignField: '_id', as: 'workingDay' } },
                         { $lookup: { from: 'detailrevenues', localField: '_id', foreignField: 'revenues', as: 'detailRevenue' } },
+                        { $sort: { 'createdAt': -1 } },
                     ])];
             case 2:
                 responseItem = _a.sent();
@@ -396,7 +401,7 @@ var getRevenue = function (id) { return __awaiter(void 0, void 0, void 0, functi
 }); };
 exports.getRevenue = getRevenue;
 var getRevenueTurn = function (revenue) { return __awaiter(void 0, void 0, void 0, function () {
-    var filter, Objectid, turn, users, page, limit, type, startDate, endDate, response, dataStartDate, dataEndDate, dateStr, nextDate, now, formatoMap, dateStr, nextDate, responseItem, e_1;
+    var filter, Objectid, turn, users, role, page, limit, type, startDate, endDate, response, dataStartDate, dataEndDate, dateStr, nextDate, now, formatoMap, dateStr, nextDate, responseItem, e_1;
     var _a, _b, _c, _d, _e, _f;
     return __generator(this, function (_g) {
         switch (_g.label) {
@@ -405,6 +410,7 @@ var getRevenueTurn = function (revenue) { return __awaiter(void 0, void 0, void 
                 Objectid = mongoose_1.default.Types.ObjectId;
                 turn = revenue.turn || '';
                 users = revenue.users || '';
+                role = revenue.role || '';
                 page = parseInt(revenue.page, 10) || 1;
                 limit = parseInt(revenue.limit, 10) || 10;
                 type = revenue.type || '';
@@ -430,16 +436,20 @@ var getRevenueTurn = function (revenue) { return __awaiter(void 0, void 0, void 
                     // console.log('ingreso turn')
                     filter.turn = new Objectid(turn);
                 }
-                console.log('typetype', type);
-                // if (type !== "") {
-                //     console.log('ingreso type')
-                //     filter.type = type;
-                // }
-                console.log('filter', filter);
-                // if (users !== "") {
-                //     console.log('ingreso turn')
-                //     filter.users = new ObjectId(users) ;
-                // }
+                console.log('users', role);
+                if (type !== "") {
+                    console.log('ingreso type');
+                    filter.type = type;
+                }
+                console.log('filter get-revenue-turn', filter);
+                if (users !== "" && role !== 'Admin') {
+                    console.log('ingreso es users');
+                    // filter.users = new ObjectId(users) ;
+                    filter.users = new Objectid(users);
+                }
+                else {
+                    console.log('es admin');
+                }
                 // console.log('turn', users)
                 // return workingDay;
                 // if (workingDay !== null) {
@@ -472,6 +482,7 @@ var getRevenueTurn = function (revenue) { return __awaiter(void 0, void 0, void 
                         $gte: dateStr, $lt: nextDate
                     };
                 }
+                console.log('datos filter', filter);
                 _g.label = 1;
             case 1:
                 _g.trys.push([1, 3, , 4]);
@@ -486,6 +497,7 @@ var getRevenueTurn = function (revenue) { return __awaiter(void 0, void 0, void 
                                 },
                             },
                         },
+                        { $sort: { 'createdAt': -1 } },
                         { $skip: (page - 1) * limit || 0 },
                         { $limit: Number(limit) },
                         {
@@ -509,6 +521,11 @@ var getRevenueTurn = function (revenue) { return __awaiter(void 0, void 0, void 
                                         "updatedAt": "$updatedAt",
                                         "users": "$users",
                                         "workingDay": "$workingDay",
+                                        "type": "$type",
+                                        "validAdmin": "$validAdmin",
+                                        "noteValid": "$noteValid",
+                                        "validDate": "$validDate",
+                                        "usersAdmin": "$usersAdmin",
                                     }
                                 }
                             }
@@ -621,6 +638,7 @@ var getRevenueOther = function (revenue) { return __awaiter(void 0, void 0, void
                                 },
                             },
                         },
+                        { $sort: { 'createdAt': -1 } },
                         { $skip: (page - 1) * limit || 0 },
                         { $limit: Number(limit) },
                         {

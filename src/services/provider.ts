@@ -2,8 +2,9 @@ import { Provider } from "../interfaces/provider.interface";
 import ProviderModel from "../models/Provider";
 import { getWorkingForDate, deleteWorkingDay, insertWorkingDay, getWorkingDays } from "./workingDay";
 import { WorkingDay } from "../interfaces/working-day.interface";
-
-
+import { ResponsePagination } from "../interfaces/response-pagination.interface";
+import mongoose from "mongoose";
+const ObjectId = mongoose.Types.ObjectId;
 
 const insertProvider = async (provider: Provider) => {
     const responseInsert = await ProviderModel.create(provider);
@@ -36,7 +37,21 @@ const validTurn = async (userId:string) => {
 
 const getSearchProvider = async (query: any) => {
     let valid: any = {};
+    const page = parseInt(query.page, 10)  || 1;
+    const limit = parseInt(query.limit, 10) || 10;
     const search = query.search || null;
+    let response: ResponsePagination = {
+        docs: [],
+        totalDocs:  0,
+        limit: limit,
+        totalPages: 0,
+        page: 1,
+        pagingCounter: 1,
+        hasPrevPage: false,
+        hasNextPage: true,
+        prevPage: null ,
+        nextPage: 0 
+    }
     const options = {
         page: parseInt(query.page, 10)  || 1,
         limit: parseInt(query.limit, 10) || 10
@@ -51,17 +66,68 @@ const getSearchProvider = async (query: any) => {
     } 
     
     const responseItem = await ProviderModel.paginate( valid, options );
+    // if (Object.entries(responseItem).length > 0) {
+    //     response.docs = responseItem;
+    //     response.totalDocs = responseItem[0].totalDocs;
+    //     response.limit = limit;
+    //     response.totalPages = Math.ceil( responseItem[0].totalDocs / limit );
+    //     response.page = (page - 1) * limit || 0;
+    //     response.prevPage = page;
+    //     response.nextPage = (page + 1);
+    // }
+    // return response;
     return responseItem;
 }
 
 const getProviders = async () => {
+    let response: ResponsePagination = {
+        docs: [],
+        totalDocs:  0,
+        limit: 1,
+        totalPages: 0,
+        page: 1,
+        pagingCounter: 1,
+        hasPrevPage: false,
+        hasNextPage: true,
+        prevPage: null ,
+        nextPage: 0 
+    }
     const responseItem = await ProviderModel.find({});
     return responseItem;
 }
 
 const getProvider = async (id:string) => {
-    const responseItem = await ProviderModel.findOne({_id:id});
-    return responseItem;
+    let valid: any = {};
+   
+    let response: ResponsePagination = {
+        docs: [],
+        totalDocs:  0,
+        limit: 1,
+        totalPages: 0,
+        page: 1,
+        pagingCounter: 1,
+        hasPrevPage: false,
+        hasNextPage: true,
+        prevPage: null ,
+        nextPage: 0 
+    }
+    
+    try {
+        const ObjectId = mongoose.Types.ObjectId;
+        valid = { _id: new ObjectId(id)};
+        const responseItem = await ProviderModel.aggregate([
+            { $match: valid },
+        ]);
+
+       if (Object.entries(responseItem as any).length > 0) {
+            response.docs = responseItem as any;
+        }
+        
+        return response;
+    } catch (error) {
+        console.log('error', error)
+        
+    }
 }
 
 const updateProvider = async ( id:any, data: Provider) => {

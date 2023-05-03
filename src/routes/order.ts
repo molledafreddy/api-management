@@ -19,6 +19,7 @@ const router = Router()
  */
 router.get('/search-order-paitout', checkJwt,  checkRoleAuth(['User', 'Admin']), searchOrderPaitOut);
 router.get('/', checkJwt, checkRoleAuth(['User', 'Admin']), getOrders);
+// checkRoleAuth(['User', 'Admin']),
 router.get('/:id', checkJwt, checkRoleAuth(['User', 'Admin']), getOrder);
 router.get('/status/provider/:id', checkJwt, checkRoleAuth(['User', 'Admin']), consultStatusOrder);
 
