@@ -1,6 +1,6 @@
 
 export interface LogisticOrder {
-    status: 'requested' | 'received' | 'no_received' | 'verified' | 'cancelled' | 'cancelled_provider' | 'paid_out' | 'pending_for_payment';
+    status: 'solicitado' | 'recibido' | 'no_recibido' | 'verificado' | 'cancelado' | 'cancelado_proveedor' | 'pagado' | 'pendiente_por_pago';
     orders?: string;
     users?: string;
     workingDay: string;

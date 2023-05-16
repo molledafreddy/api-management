@@ -8,11 +8,11 @@ export interface Order extends Auth {
     creditPaymentDate?: Date;
     orderDate?: Date;
     descriptionOrder?: String;
-    status: 'requested' | 'received' | 'no_received' | 'verified' | 'cancelled' | 'cancelled_provider' | 'paid_out' | 'pending_for_payment';
+    status: 'solicitado' | 'recibido' | 'no_recibido' | 'verificado' | 'cancelado' | 'cancelado_proveedor' | 'pagado' | 'pendiente_por_pago';
     estimatedAmount?: Number;
     amountPaid?: number;
     providers?: string;
-    paymentMethod: 'discounted' | 'credit' | 'partial' | 'consignment';
+    paymentMethod: 'descontado' | 'credito' | 'parcial' | 'consignacion';
     invoiceFile?: string;
     validAdmin?: 'Verificado' | 'por_verificar' | 'con_error';
     noteValid?: string;

@@ -1,6 +1,20 @@
 
 export interface OperationBills {
     amount: number;
-    type: 'salary' | 'administrative' | 'accountant' | 'investment' |'light_service' | 'water_service' | 'common_expense' | 'decrease' | 'rent' | 'cleaning_products' | 'profits' | 'construction_materials' | 'workforce' | 'implements' | 'remodeling' | 'publicity' | 'innovation' | 'other';
+    type: 'salario' | 'administrativo' | 'contador' | 'inversion' | 'servicio_electrico' 
+    | 'servicio_agua' 
+    | 'gastos_comunes' 
+    | 'decrease' 
+    | 'alquiler' 
+    | 'productos_limpieza' 
+    | 'beneficios' 
+    | 'materiales_contruccion' 
+    | 'personal' 
+    | 'implementos' 
+    | 'remodelacion' 
+    | 'publicidad' 
+    | 'innovación'
+    | 'ganancia'
+    | 'otros';
     description?: String;
 }

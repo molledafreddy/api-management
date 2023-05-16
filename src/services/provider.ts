@@ -93,7 +93,12 @@ const getProviders = async () => {
         nextPage: 0 
     }
     const responseItem = await ProviderModel.find({});
-    return responseItem;
+    if (Object.entries(responseItem).length > 0) {
+        response.docs = responseItem;
+        response.totalDocs = responseItem as any;
+            
+    }
+    return response;
 }
 
 const getProvider = async (id:string) => {

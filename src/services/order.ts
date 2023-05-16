@@ -358,7 +358,7 @@ const getOrderDetail = async (id:string) => {
     filtro = { 
         _id: new mongoose.Types.ObjectId('6372308ba15b0459089cf6e0'),
         providers: new mongoose.Types.ObjectId('6358403b25b29d9b3d42846c'),
-        status: 'paid_out',
+        status: 'pagado',
         // EstimateReceptionDate:{
         //     $gte: dateStr,
         //     $lt: nextDate
@@ -406,7 +406,7 @@ const getOrderDetail = async (id:string) => {
 
 
 const validPaidOrder = (order: RequestOrder): string => {
-    if (order.status === "paid_out" && order.amountPaid as number  <=0 ) {
+    if (order.status === "pagado" && order.amountPaid as number  <=0 ) {
         return "NOT_FOUND_AMOUNT";
     }
     // return "paso la validacion";
@@ -445,7 +445,7 @@ const insertOrUpdateOrder = async (order: RequestOrder) => {
         return "PROVEEDOR_NOT_FOUND";
     }
     // return [order];
-    if (order.status != "paid_out" 
+    if (order.status != "pagado" 
         && order.estimatedAmount as number  <= 0) {
         return "NOT_FOUND_ESTIMATED_AMOUNT";
     }
@@ -458,7 +458,7 @@ const insertOrUpdateOrder = async (order: RequestOrder) => {
     //     return "INFORMATION_EGREES_WITH_DATA";
     // }
     
-    if (order.status === "paid_out") {
+    if (order.status === "pagado") {
         const value = validPaidOrder(order);
         if (value != "VALID_SUCCESS") {
             return value;

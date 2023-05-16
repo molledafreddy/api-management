@@ -18,9 +18,9 @@ const router = Router()
  */
 //  checkJwt, checkRoleAuth(['User','admin']),
 router.get('/',  getPaymentTypes);
-router.get('/:id',checkJwt, checkRoleAuth(['User','admin']), logMiddleware, getPaymentType);
-router.put('/:id',checkJwt, checkRoleAuth(['User','admin']), updatePaymentType);
-router.post('/',checkJwt,checkRoleAuth(['User','admin']), postPaymentType);
-router.delete('/:id',checkJwt, checkRoleAuth(['User','admin']), deletePaymentType);
+router.get('/:id',checkJwt, checkRoleAuth(['User','Admin']), logMiddleware, getPaymentType);
+router.put('/:id',checkJwt, checkRoleAuth(['User','Admin']), updatePaymentType);
+router.post('/',checkJwt,checkRoleAuth(['User','Admin']), postPaymentType);
+router.delete('/:id',checkJwt, checkRoleAuth(['User','Admin']), deletePaymentType);
 
 export { router};
