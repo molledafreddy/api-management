@@ -16,9 +16,9 @@ WORKDIR /app
 # COPY . /app
 COPY package*.json ./
 
-COPY . .
-
 ENV DB_URI=mongodb+srv://molledafreddy:freddy2..@cluster0.1e16p.mongodb.net/app-manager
+
+COPY . .
 
 RUN npm install
 

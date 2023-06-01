@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { getFile } from "../controllers/upload";
+import { getFile, postImg,  deleteImg } from "../controllers/upload";
 import multerMilddleware from "../middleware/file";
 // import data from "../middleware/file";
 import { checkJwt } from "../middleware/session";
@@ -25,7 +25,7 @@ router.get('/:img', function(req, res){
     res.sendFile(PATH_STORAGE);
 });
 // router.put('/:id', updateItem);
-// router.post('/', postItem);
-// router.delete('/:id', deleteItem);
+router.post('/', multerMilddleware, postImg);
+router.delete('/:id',multerMilddleware, deleteImg);
 
 export { router};

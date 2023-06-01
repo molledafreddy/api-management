@@ -4,6 +4,7 @@ import { getProvider } from "./provider";
 import { getWorkingForDate, insertWorkingDay } from "./workingDay";
 
 const getBanks = async () => {
+    console.log('llego por aca getBanks')
     const responseItem = await BankModel.find({});
     return responseItem;
 }

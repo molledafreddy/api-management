@@ -6,4 +6,5 @@ export interface Account {
     banks: string;
     providers: string;
     created: Date;
+    rut?: string;
 }

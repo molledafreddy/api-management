@@ -376,13 +376,13 @@ console.log('users', role)
         filter.type = type;
     }
     console.log('filter get-revenue-turn', filter)
-    if (users !== "" && role !== 'Admin') {
-        console.log('ingreso es users')
-        // filter.users = new ObjectId(users) ;
-        filter.users = new Objectid(users);
-    } else {
-        console.log('es admin')
-    }
+    // if (users !== "" && role !== 'Admin') {
+    //     console.log('ingreso es users')
+    //     // filter.users = new ObjectId(users) ;
+    //     filter.users = new Objectid(users);
+    // } else {
+    //     console.log('es admin')
+    // }
     // console.log('turn', users)
     // return workingDay;
     // if (workingDay !== null) {

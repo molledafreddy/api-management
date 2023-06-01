@@ -9,6 +9,10 @@ const AccountSchema: Schema = new Schema <Account> (
             type: String,
             required: true,
         },
+        rut: {
+            type: String,
+            required: false,
+        },
         type: {
             type: String,
             enum: ["corriente", "vista", "ahorro", "rut"],
