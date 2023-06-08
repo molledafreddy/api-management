@@ -41,8 +41,9 @@ const insertOrUpdateRevenueWorkingDay = async (revenue: RequestRevenueWorkingDay
         const resultUpdate = await updateRevenue(revenue.id as string, revenue);
         return resultUpdate;
     } else {
+        console.log('revenue.users', revenue.users)
         const validTurnR = await validTurn(revenue.users, 'Active');
-        // console.log('data', validTurnR)
+        console.log('data validTurnR', validTurnR)
         // return validTurnR;
         if (Object.keys(validTurnR).length <= 0) {
             const resError: ResponseError = {

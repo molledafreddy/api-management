@@ -76,6 +76,10 @@ const RevenueSchema: Schema = new Schema <Revenue> (
             type: Date,
             required: false
         },
+        createdDate: {
+            type: Date,
+            required: false
+        },
     }, 
     {
         timestamps: true,

@@ -30,7 +30,7 @@ router.get('/detail/:id', checkJwt,  checkRoleAuth(['User', 'Admin']), getOrderD
 // checkJwt, checkRoleAuth(['User', 'admin']),
 router.post('/',multerMilddleware, checkJwt, checkRoleAuth(['User', 'Admin']), postOrder);
 // checkJwt, checkRoleAuth(['User', 'admin']),
-router.post('/search/detail',  searchOrderDetail);
+router.post('/search/detail', checkJwt, checkRoleAuth(['User', 'Admin']), searchOrderDetail);
 
 // router.delete('/:id', deleteItem);
 

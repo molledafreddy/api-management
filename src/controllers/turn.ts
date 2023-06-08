@@ -1,6 +1,6 @@
 import { Request, response, Response } from "express";
 import { RequestExt } from "../interfaces/request-ext.interface";
-import { insertTurn, searchTurnForUser, getTurn as turnId, getCars, getCar, updateCar, deleteCar } from "../services/turn";
+import { insertTurn, validTurn, searchTurnForUser, getTurn as turnId, getCars, getCar, updateCar, deleteCar } from "../services/turn";
 import { handleHttp } from "../utils/error.handle";
 
 const getTurn = async ({params}: Request, res: Response) => {
@@ -11,6 +11,17 @@ const getTurn = async ({params}: Request, res: Response) => {
         res.send(data);
     } catch (e) {
         handleHttp(res, "ERROR_GET_TURN")
+    }
+}
+
+const getValidTurn = async ({params}: Request, res: Response) => {
+    try {
+        const {id} = params;
+        const response = await validTurn(id,'Active');
+        const data = response ? response : "NOT_FOUND_VALID_TURN";
+        res.send(data);
+    } catch (e) {
+        handleHttp(res, "ERROR_GET_VALID_TURN")
     }
 }
 
@@ -68,4 +79,4 @@ const deleteTurn = async ({params}: Request, res: Response) => {
     }
 }
 
-export {getTurn, getTurns, getTurnsForUser, updateTurn, postTurn, deleteTurn};
+export {getTurn, getValidTurn, getTurns, getTurnsForUser, updateTurn, postTurn, deleteTurn};

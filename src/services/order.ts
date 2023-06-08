@@ -257,10 +257,10 @@ const searchOrderPaitOut = async (order: any) => {
         // var nextDate = new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,23,59,59, 999);
         
         filter.paymentDate = {
-            $gte: new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd-2,23,59,59, 999), 
-            $lt:  new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,23,59,59, 999)
-            // $gte: new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,0,0,0,0), 
+            // $gte: new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd-2,23,59,59, 999), 
             // $lt:  new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,23,59,59, 999)
+            $gte: new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,0,0,0,0), 
+            $lt:  new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd-1,23,59,59, 999)
         }
 
         // const formatoMap = {

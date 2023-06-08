@@ -120,22 +120,29 @@ const validTurn = async (userId:any, statusP: any) => {
     if (users !== '') {
         filter.users = new ObjectId(users);
     }
-    // console.log('fecha de ahora', now)
+    
     const formatoMap = {
         dd: now.getDate(),
         mm: now.getMonth() + 1,
         yy: now.getFullYear().toString().slice(-2),
         yyyy: now.getFullYear()
     };
-    var dateStr = new Date(formatoMap.yyyy, formatoMap.mm-1,formatoMap.dd,0,0,0,0);
-    var nextDate = new Date(formatoMap.yyyy,formatoMap.mm-1,formatoMap.dd,23,59,59, 999);
-    filter.createdAt = {$gte: dateStr, $lt: nextDate}
     
+    // var dateStr = new Date(formatoMap.yyyy, formatoMap.mm-1,formatoMap.dd-1,23,59,59, 999);
+    // var nextDate = new Date(formatoMap.yyyy,formatoMap.mm-1,formatoMap.dd,23,59,59, 999);
+
+    var dateStr = new Date(formatoMap.yyyy, formatoMap.mm-1,formatoMap.dd-1,0,0,0,0);
+    var nextDate = new Date(formatoMap.yyyy,formatoMap.mm-1,formatoMap.dd,23,59,59, 999);
+    // filter.createdAt = {$gte: dateStr, $lt: nextDate}
+    console.log('filter.createdAt', filter)
+    console.log('dateStr', dateStr)
+    console.log('nextDate', nextDate)
     const responseTurn = await Turn.find({
         createdAt: { $gte: dateStr, $lt: nextDate},
+        // startDate: { $gte: dateStr, $lt: nextDate},
         status: status,
-         users: userId
-        });
+        users: userId
+    });
         
     return responseTurn;
 }

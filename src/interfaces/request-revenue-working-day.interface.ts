@@ -13,5 +13,6 @@ export interface RequestRevenueWorkingDay  {
     validAdmin?: 'Verificado' | 'por_verificar' | 'con_error';
     noteValid?: string;
     validDate?: Date;
+    createdDate?: Date;
 }
 

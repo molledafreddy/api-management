@@ -93,8 +93,8 @@ const postRevenueWorkingDay = async (req: RequestExt, res: Response) => {
       // res.status(500)
       // res.send(body);
       let formattotalAmount = 0;
-      console.log('valueOrder.amount', valueRevenue.datos)
-      console.log('valueOrder user',user)
+      // console.log('valueOrder.amount', valueRevenue.amountSistem)
+      // console.log('valueOrder user',user)
       // console.log('valueRevenue?.totalAmount', valueRevenue?.totalAmount)
       // res.send(valueRevenue);
       if (valueRevenue?.totalAmount !== null && valueRevenue?.totalAmount !== undefined) {
@@ -111,7 +111,8 @@ const postRevenueWorkingDay = async (req: RequestExt, res: Response) => {
         type: valueRevenue.type,
         noteValid: valueRevenue.noteValid,
         validAdmin: valueRevenue.validAdmin,
-        usersAdmin: user?._id
+        usersAdmin: user?._id,
+        createdDate: valueRevenue?.createdDate,
       }
       // res.send(reqRevenue);
       const  responseOrder = await insertOrUpdateRevenueWorkingDay(reqRevenue);

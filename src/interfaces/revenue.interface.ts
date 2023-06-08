@@ -18,4 +18,5 @@ export interface Revenue {
     validAdmin?: 'Verificado' | 'por_verificar' | 'con_error';
     noteValid?: string;
     validDate?: Date;
+    createdDate?: Date;
 }
