@@ -138,8 +138,8 @@ const validTurn = async (userId:any, statusP: any) => {
     console.log('dateStr', dateStr)
     console.log('nextDate', nextDate)
     const responseTurn = await Turn.find({
-        createdAt: { $gte: dateStr, $lt: nextDate},
-        // startDate: { $gte: dateStr, $lt: nextDate},
+        // createdAt: { $gte: dateStr, $lt: nextDate},
+        startDate: { $gte: dateStr, $lt: nextDate},
         status: status,
         users: userId
     });
