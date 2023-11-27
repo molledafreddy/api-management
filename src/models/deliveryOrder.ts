@@ -19,9 +19,10 @@ const DeliveryOrderSchema: Schema = new Schema <DeliveryOrder> (
             required: false,
         },
         status: {
-            type: Boolean,
+            type: String,
+            enum: ["activo", "procesando" , "entregado", "cancelado"],
             required: false,
-        }
+        },
     }, 
     {
         timestamps: true,

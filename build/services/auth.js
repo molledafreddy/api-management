@@ -46,20 +46,25 @@ var jwt_handle_1 = require("../utils/jwt.handle");
 var registerNewUser = function (_a) {
     var email = _a.email, password = _a.password, name = _a.name, role = _a.role;
     return __awaiter(void 0, void 0, void 0, function () {
-        var checkIs, passHash, registerNewUser;
+        var dataEmail, checkIs, passHash, registerNewUser;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0: return [4 /*yield*/, user_1.default.findOne({ email: email })];
+                case 0:
+                    dataEmail = email.toLowerCase();
+                    console.log('dataEmail', dataEmail);
+                    return [4 /*yield*/, user_1.default.find({ email: dataEmail })];
                 case 1:
                     checkIs = _b.sent();
-                    if (checkIs)
+                    console.log('checkIs', checkIs);
+                    if (checkIs.length > 0)
                         return [2 /*return*/, "ALREAY_USER"];
                     return [4 /*yield*/, (0, bcrypt_handle_1.encrypt)(password)];
                 case 2:
                     passHash = _b.sent();
-                    return [4 /*yield*/, user_1.default.create({ email: email, password: passHash, name: name, role: role })];
+                    return [4 /*yield*/, user_1.default.create({ email: dataEmail, password: passHash, name: name, role: role })];
                 case 3:
                     registerNewUser = _b.sent();
+                    console.log('registerNewUser', registerNewUser);
                     return [2 /*return*/, registerNewUser];
             }
         });
@@ -69,28 +74,29 @@ exports.registerNewUser = registerNewUser;
 var loginUser = function (_a) {
     var email = _a.email, password = _a.password;
     return __awaiter(void 0, void 0, void 0, function () {
-        var checkIs, passwordHash, isCorrect, token, data;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, user_1.default.findOne({ email: email })];
+        var dataEmail, checkIs, passwordHash, isCorrect, token, data;
+        var _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    dataEmail = email.toLowerCase();
+                    return [4 /*yield*/, user_1.default.find({ email: dataEmail })];
                 case 1:
-                    checkIs = _b.sent();
-                    console.log('checkis', checkIs);
-                    if (!checkIs)
+                    checkIs = _c.sent();
+                    if ((checkIs === null || checkIs === void 0 ? void 0 : checkIs.length) === 0)
                         return [2 /*return*/, "NOT_FOUND_USER"];
-                    passwordHash = checkIs.password;
+                    passwordHash = (_b = checkIs[0]) === null || _b === void 0 ? void 0 : _b.password;
                     return [4 /*yield*/, (0, bcrypt_handle_1.verified)(password, passwordHash)];
                 case 2:
-                    isCorrect = _b.sent();
+                    isCorrect = _c.sent();
                     if (!isCorrect)
                         return [2 /*return*/, "NOT_FOUND_USER"];
-                    return [4 /*yield*/, (0, jwt_handle_1.generateToken)(checkIs)];
+                    return [4 /*yield*/, (0, jwt_handle_1.generateToken)(checkIs[0])];
                 case 3:
-                    token = _b.sent();
-                    console.log('usuario encontrado', token);
+                    token = _c.sent();
                     data = {
                         token: token,
-                        user: checkIs
+                        user: checkIs[0]
                     };
                     return [2 /*return*/, data];
             }

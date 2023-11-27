@@ -159,8 +159,8 @@ var postRevenueWorkingDay = function (req, res) { return __awaiter(void 0, void 
                     dataFiles = JSON.parse(req.body.dataFiles);
                 }
                 formattotalAmount = 0;
-                console.log('valueOrder.amount', valueRevenue.datos);
-                console.log('valueOrder user', user);
+                // console.log('valueOrder.amount', valueRevenue.amountSistem)
+                // console.log('valueOrder user',user)
                 // console.log('valueRevenue?.totalAmount', valueRevenue?.totalAmount)
                 // res.send(valueRevenue);
                 if ((valueRevenue === null || valueRevenue === void 0 ? void 0 : valueRevenue.totalAmount) !== null && (valueRevenue === null || valueRevenue === void 0 ? void 0 : valueRevenue.totalAmount) !== undefined) {
@@ -177,7 +177,8 @@ var postRevenueWorkingDay = function (req, res) { return __awaiter(void 0, void 
                     type: valueRevenue.type,
                     noteValid: valueRevenue.noteValid,
                     validAdmin: valueRevenue.validAdmin,
-                    usersAdmin: user === null || user === void 0 ? void 0 : user._id
+                    usersAdmin: user === null || user === void 0 ? void 0 : user._id,
+                    createdDate: valueRevenue === null || valueRevenue === void 0 ? void 0 : valueRevenue.createdDate,
                 };
                 return [4 /*yield*/, (0, revenue_1.insertOrUpdateRevenueWorkingDay)(reqRevenue)];
             case 1:

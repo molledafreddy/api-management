@@ -19,7 +19,7 @@ exports.router = router;
  */
 //  checkJwt, checkRoleAuth(['User','admin']),
 router.get('/', paymentType_1.getPaymentTypes);
-router.get('/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'admin']), log_1.logMiddleware, paymentType_1.getPaymentType);
-router.put('/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'admin']), paymentType_1.updatePaymentType);
-router.post('/', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'admin']), paymentType_1.postPaymentType);
-router.delete('/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'admin']), paymentType_1.deletePaymentType);
+router.get('/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), log_1.logMiddleware, paymentType_1.getPaymentType);
+router.put('/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), paymentType_1.updatePaymentType);
+router.post('/', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), paymentType_1.postPaymentType);
+router.delete('/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), paymentType_1.deletePaymentType);

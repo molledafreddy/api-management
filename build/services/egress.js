@@ -327,7 +327,7 @@ var getOrderDetail = function (id) { return __awaiter(void 0, void 0, void 0, fu
                 filtro = {
                     _id: new mongoose_1.default.Types.ObjectId('6372308ba15b0459089cf6e0'),
                     providers: new mongoose_1.default.Types.ObjectId('6358403b25b29d9b3d42846c'),
-                    status: 'paid_out',
+                    status: 'pagado',
                     // EstimateReceptionDate:{
                     //     $gte: dateStr,
                     //     $lt: nextDate
@@ -375,7 +375,7 @@ var getOrderDetail = function (id) { return __awaiter(void 0, void 0, void 0, fu
 }); };
 exports.getOrderDetail = getOrderDetail;
 var validPaidOrder = function (order) {
-    if (order.status === "paid_out" && order.amountPaid <= 0) {
+    if (order.status === "pagado" && order.amountPaid <= 0) {
         return "NOT_FOUND_AMOUNT";
     }
     // return "paso la validacion";

@@ -75,6 +75,10 @@ var RevenueSchema = new mongoose_1.Schema({
         type: Date,
         required: false
     },
+    createdDate: {
+        type: Date,
+        required: false
+    },
 }, {
     timestamps: true,
     versionKey: false

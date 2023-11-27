@@ -94,6 +94,7 @@ var postAccount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 _a.trys.push([0, 2, , 3]);
                 user = req.user, body = req.body;
                 body.users = "".concat(user === null || user === void 0 ? void 0 : user._id);
+                console.log('body', body);
                 return [4 /*yield*/, (0, account_1.insertAccount)(body)];
             case 1:
                 responseOrder = _a.sent();
@@ -101,6 +102,7 @@ var postAccount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 return [3 /*break*/, 3];
             case 2:
                 e_3 = _a.sent();
+                console.log('e', e_3);
                 (0, error_handle_1.handleHttp)(res, "ERROR_POST_ACCOUNTS", e_3);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];

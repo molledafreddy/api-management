@@ -39,8 +39,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUpload = void 0;
+exports.deleteImage = exports.registerUploadCloudinary = exports.registerUpload = void 0;
 var storage_1 = __importDefault(require("../models/storage"));
+var cloudinary_1 = __importDefault(require("../utils/cloudinary"));
+var fs_1 = __importDefault(require("fs"));
 var registerUpload = function (_a) {
     var fileName = _a.fileName, idUser = _a.idUser, path = _a.path;
     return __awaiter(void 0, void 0, void 0, function () {
@@ -56,3 +58,53 @@ var registerUpload = function (_a) {
     });
 };
 exports.registerUpload = registerUpload;
+var registerUploadCloudinary = function (data) { return __awaiter(void 0, void 0, void 0, function () {
+    var response, res_promises, e_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                response = [];
+                if (!(Object.keys(data.files).length > 0)) return [3 /*break*/, 2];
+                res_promises = data.files.map(function (file) { return new Promise(function (resolve, reject) {
+                    cloudinary_1.default.uploader.upload(file.path, { use_filename: true, unique_filename: false }, function (error, result) {
+                        if (error)
+                            reject(error);
+                        else
+                            resolve(result);
+                    });
+                }); });
+                return [4 /*yield*/, Promise.all(res_promises)
+                        .then(function (result) {
+                        data.files.forEach(function (file) {
+                            fs_1.default.unlinkSync(file.path);
+                        });
+                        return result;
+                    })
+                        .catch(function (error) { })];
+            case 1:
+                response = _a.sent();
+                _a.label = 2;
+            case 2: return [2 /*return*/, response];
+            case 3:
+                e_1 = _a.sent();
+                console.log(e_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.registerUploadCloudinary = registerUploadCloudinary;
+var deleteImage = function (public_id) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, cloudinary_1.default.uploader.destroy(public_id, function (result) { console.log('result', result); })];
+            case 1:
+                response = _a.sent();
+                // const responseInsert = await StorageModel.create({fileName, idUser, path});
+                return [2 /*return*/, response];
+        }
+    });
+}); };
+exports.deleteImage = deleteImage;

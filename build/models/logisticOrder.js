@@ -8,7 +8,7 @@ var LogisticOrderSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: ["requested", "received", "no_received", "verified", "cancelled", "cancelled_provider", "paid_out", "pending_for_payment"],
+        enum: ["solicitado", "recibido", "no_recibido", "verificado", "cancelado", "cancelado_proveedor", "pagado", "pendiente_por_pago"],
         required: true
     },
     orders: [{

@@ -36,7 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFile = void 0;
+exports.deleteImg = exports.postImg = exports.getFile = void 0;
+var storage_1 = require("../services/storage");
 var error_handle_1 = require("../utils/error.handle");
 var getFile = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, file, dataToRegister, coche, json, coche2, detailRevenue;
@@ -53,6 +54,15 @@ var getFile = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
             json = JSON.stringify(coche);
             coche2 = JSON.parse(req.body.detailRevenue.toString());
             detailRevenue = JSON.stringify(coche2);
+            console.log('file?.path', file === null || file === void 0 ? void 0 : file.path);
+            // const res = claudinary.uploader.
+            //   upload('https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg', {public_id: "olympic_flag"})
+            // res.then((data) => {
+            //   console.log(data);
+            //   console.log(data.secure_url);
+            // }).catch((err) => {
+            //   console.log(err);
+            // });
             // JSON.parse('[1, 2, 3, 4, ]');
             // const response = await registerUpload(dataToRegister);
             // res.send(response);
@@ -66,3 +76,64 @@ var getFile = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
     });
 }); };
 exports.getFile = getFile;
+var postImg = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, files, dataToRegister, response, dataFiles, e_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                user = req.user, files = req.files;
+                dataToRegister = {
+                    fileName: "".concat(files === null || files === void 0 ? void 0 : files.filename),
+                    idUser: "".concat(user === null || user === void 0 ? void 0 : user._id),
+                    path: "".concat(files === null || files === void 0 ? void 0 : files.path),
+                };
+                response = [];
+                dataFiles = [];
+                dataFiles.files = files;
+                if (!(Object.keys(dataFiles.files).length > 0)) return [3 /*break*/, 2];
+                return [4 /*yield*/, (0, storage_1.registerUploadCloudinary)(dataFiles)];
+            case 1:
+                // console.log('dataFiles', dataFiles)
+                response = _a.sent();
+                _a.label = 2;
+            case 2:
+                console.log('response', response);
+                res.send(response);
+                return [3 /*break*/, 4];
+            case 3:
+                e_1 = _a.sent();
+                console.log(e_1);
+                (0, error_handle_1.handleHttp)(res, "ERROR_GET_BLOG");
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.postImg = postImg;
+var deleteImg = function (_a, res) {
+    var params = _a.params;
+    return __awaiter(void 0, void 0, void 0, function () {
+        var id, response, e_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    id = params.id;
+                    console.log('id', id);
+                    return [4 /*yield*/, (0, storage_1.deleteImage)(id)];
+                case 1:
+                    response = _b.sent();
+                    res.send(response);
+                    return [3 /*break*/, 3];
+                case 2:
+                    e_2 = _b.sent();
+                    console.log(e_2);
+                    (0, error_handle_1.handleHttp)(res, "ERROR_GET_BLOG");
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+};
+exports.deleteImg = deleteImg;

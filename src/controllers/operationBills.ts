@@ -14,7 +14,6 @@ import { Egress } from "../interfaces/egress.interface";
 
 const getOperationBills = async (req: RequestExt, res: Response) => {
   try {
-      
       const query = req.query;
       const response = await operationBills(query);
       res.send(response);
@@ -58,21 +57,17 @@ const getPaymentHasEgress = async ({params}: RequestExt, res: Response) => {
 
 const postOperationBills = async (req: RequestExt, res: Response) => {
   try {
-      // console.log('req', req)
         const { user, body, files } = req;
         body.users = `${user?._id}`;
-        var valueOperation = JSON.parse(req.body.data)
-        // res.send(body);
+        var valueOperation = JSON.parse(req.body.data);
         console.log('req.body', req)
         var paymentHasEgress = [];
         if (req.body.paymentHasEgress !== 'undefined') {
           paymentHasEgress = JSON.parse(req.body.paymentHasEgress);
         }
-        // console.log('req.body.dataFiles', req.body.dataFiles)
         if (req.body.dataFiles !== undefined) {
           var dataFiles = JSON.parse(req.body.dataFiles);
         }
-        console.log('files', files);
         let now= new Date();
         const formatoMap = {
             dd: now.getDate(),
@@ -80,13 +75,11 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
             yy: now.getFullYear().toString().slice(-2),
             yyyy: now.getFullYear()
         };
-        // console.log('formatoMap', formatoMap)
         let formatAmount = 0;
         if (valueOperation?.amount !== null && valueOperation?.amount !== undefined) {
           formatAmount = valueOperation?.amount.toString().replace(/[$.,]/g,'');
         }
         
-        // console.log('formatAmount', formatAmount)
         const egress: Egress = {
           _id: valueOperation._idEgress,
           invoiceNumber: valueOperation.invoiceNumber,
@@ -96,8 +89,6 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
           type: 'operationBills',
           paymentDate: new Date(formatoMap.yyyy,formatoMap.mm-1,formatoMap.dd,12,0,0)
         }
-
-        
     
         const reqOperation: RequestOperationBills = {
           id: body?.id,
@@ -109,19 +100,13 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
           files: files as any,
           dataFiles: dataFiles as any,
         }
-
-        console.log('egress', reqOperation);
-        // res.send(reqOperation);
         if (!valueOperation._id) {
-          // console.log('llego al post')
           const  responseOrder = await insertOperationBills(reqOperation);
           res.send(responseOrder);
         } else {
-          console.log('llego al update')
           const response = await updateOperation(valueOperation._id, reqOperation);
           res.send(response);
         }
-       
   } catch (e) {
       handleHttp(res, "ERROR_POST_OPERATIONBILLS", e)
   }
@@ -129,8 +114,7 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
 
 const updateOperationBills = async (req: RequestExt, res: Response) => {
   try {
-    const { user, body, params, files } = req;
-    console.log('llego por aca body',req.body)
+      const { user, body, params, files } = req;
       const {id} = params;
       const response = await updateOperation(id, body);
       res.send(response);

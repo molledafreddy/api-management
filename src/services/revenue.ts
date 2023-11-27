@@ -371,7 +371,7 @@ const getRevenueTurn = async (revenue: any) => {
         // console.log('ingreso turn')
         filter.turn = new Objectid(turn) ;
     }
-console.log('users', role)
+    console.log('users', role)
     if (type !== "") {
         console.log('ingreso type')
         filter.type = type;

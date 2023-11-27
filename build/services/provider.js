@@ -41,6 +41,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProvider = exports.updateProvider = exports.getSearchProvider = exports.getProvider = exports.getProviders = exports.insertProvider = void 0;
 var Provider_1 = __importDefault(require("../models/Provider"));
+var mongoose_1 = __importDefault(require("mongoose"));
+var ObjectId = mongoose_1.default.Types.ObjectId;
 var insertProvider = function (provider) { return __awaiter(void 0, void 0, void 0, function () {
     var responseInsert;
     return __generator(this, function (_a) {
@@ -82,12 +84,26 @@ var validTurn = function (userId) { return __awaiter(void 0, void 0, void 0, fun
     });
 }); };
 var getSearchProvider = function (query) { return __awaiter(void 0, void 0, void 0, function () {
-    var valid, search, options, responseItem;
+    var valid, page, limit, search, response, options, responseItem;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 valid = {};
+                page = parseInt(query.page, 10) || 1;
+                limit = parseInt(query.limit, 10) || 10;
                 search = query.search || null;
+                response = {
+                    docs: [],
+                    totalDocs: 0,
+                    limit: limit,
+                    totalPages: 0,
+                    page: 1,
+                    pagingCounter: 1,
+                    hasPrevPage: false,
+                    hasNextPage: true,
+                    prevPage: null,
+                    nextPage: 0
+                };
                 options = {
                     page: parseInt(query.page, 10) || 1,
                     limit: parseInt(query.limit, 10) || 10
@@ -102,31 +118,87 @@ var getSearchProvider = function (query) { return __awaiter(void 0, void 0, void
                 return [4 /*yield*/, Provider_1.default.paginate(valid, options)];
             case 1:
                 responseItem = _a.sent();
+                // if (Object.entries(responseItem).length > 0) {
+                //     response.docs = responseItem;
+                //     response.totalDocs = responseItem[0].totalDocs;
+                //     response.limit = limit;
+                //     response.totalPages = Math.ceil( responseItem[0].totalDocs / limit );
+                //     response.page = (page - 1) * limit || 0;
+                //     response.prevPage = page;
+                //     response.nextPage = (page + 1);
+                // }
+                // return response;
                 return [2 /*return*/, responseItem];
         }
     });
 }); };
 exports.getSearchProvider = getSearchProvider;
 var getProviders = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var responseItem;
+    var response, responseItem;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, Provider_1.default.find({})];
+            case 0:
+                response = {
+                    docs: [],
+                    totalDocs: 0,
+                    limit: 1,
+                    totalPages: 0,
+                    page: 1,
+                    pagingCounter: 1,
+                    hasPrevPage: false,
+                    hasNextPage: true,
+                    prevPage: null,
+                    nextPage: 0
+                };
+                return [4 /*yield*/, Provider_1.default.find({})];
             case 1:
                 responseItem = _a.sent();
-                return [2 /*return*/, responseItem];
+                if (Object.entries(responseItem).length > 0) {
+                    response.docs = responseItem;
+                    response.totalDocs = responseItem;
+                }
+                return [2 /*return*/, response];
         }
     });
 }); };
 exports.getProviders = getProviders;
 var getProvider = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var responseItem;
+    var valid, response, ObjectId_1, responseItem, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, Provider_1.default.findOne({ _id: id })];
+            case 0:
+                valid = {};
+                response = {
+                    docs: [],
+                    totalDocs: 0,
+                    limit: 1,
+                    totalPages: 0,
+                    page: 1,
+                    pagingCounter: 1,
+                    hasPrevPage: false,
+                    hasNextPage: true,
+                    prevPage: null,
+                    nextPage: 0
+                };
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                ObjectId_1 = mongoose_1.default.Types.ObjectId;
+                valid = { _id: new ObjectId_1(id) };
+                return [4 /*yield*/, Provider_1.default.aggregate([
+                        { $match: valid },
+                    ])];
+            case 2:
                 responseItem = _a.sent();
-                return [2 /*return*/, responseItem];
+                if (Object.entries(responseItem).length > 0) {
+                    response.docs = responseItem;
+                }
+                return [2 /*return*/, response];
+            case 3:
+                error_1 = _a.sent();
+                console.log('error', error_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };

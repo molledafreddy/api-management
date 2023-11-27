@@ -22,6 +22,7 @@ exports.router = router;
  */
 router.get('/search-order-paitout', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), order_1.searchOrderPaitOut);
 router.get('/', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), order_1.getOrders);
+// checkRoleAuth(['User', 'Admin']),
 router.get('/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), order_1.getOrder);
 router.get('/status/provider/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), order_1.consultStatusOrder);
 router.get('/detail/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), order_1.getOrderDetail);
@@ -29,4 +30,4 @@ router.get('/detail/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['Us
 // checkJwt, checkRoleAuth(['User', 'admin']),
 router.post('/', file_1.default, session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), order_1.postOrder);
 // checkJwt, checkRoleAuth(['User', 'admin']),
-router.post('/search/detail', order_1.searchOrderDetail);
+router.post('/search/detail', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), order_1.searchOrderDetail);

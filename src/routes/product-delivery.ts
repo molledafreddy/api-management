@@ -1,6 +1,5 @@
 import { Router, Request, Response } from "express";
-// import { getAccounts, postAccount, getAccount, updateAccount, deleteAccount } from "../controllers/account";
-import { getCategory, postCategory, putProduct, getProductId, getAllCategory, getProducts, postProduct, postProductDelivery, getSearchProduct} from "../controllers/product";
+import { getSearchProductDelivery, putProductDelivery, getProductDeliveryId, getProductHasDelivery,  postProductDelivery} from "../controllers/productDelivery";
 import { logMiddleware } from "../middleware/log";
 import { checkRoleAuth } from "../middleware/roleAuth";
 import { checkJwt } from "../middleware/session";
@@ -19,15 +18,16 @@ const router = Router()
  */
 //  checkJwt, checkRoleAuth(['User', 'admin']),
 
-router.get('/all/category', getAllCategory);
-router.get('/category', getCategory);
-router.post('/category', postCategory);
+router.get('/search', getSearchProductDelivery);
+router.get('/:id', getProductDeliveryId);
+router.put('/:id', putProductDelivery);
+router.get('/product-has-delivery/:id',getProductHasDelivery);
+// router.get('/category', getCategory);
+// router.post('/category', postCategory);
 
-router.get('/search', getSearchProduct);
-router.get('/:id', getProductId);
-router.get('/:idCategory/:clasification?/:status?', getProducts);
-router.post('/', postProduct);
-router.put('/:id', putProduct);
+// router.get('/search', getSearchProduct);
+// router.get('/:idCategory/:clasification?/:status?', getProducts);
+// router.post('/', postProduct);
 
 router.post('/delivery', postProductDelivery);
 // logMiddleware,

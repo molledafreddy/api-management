@@ -53,9 +53,12 @@ var checkRoleAuth = function (roles) { return function (req, res, next) { return
                 jwtUser = req.headers.authorization || null;
                 jwt = jwtUser === null || jwtUser === void 0 ? void 0 : jwtUser.split(' ').pop() // ['Bearer','11111']
                 ;
+                console.log('jwtjwt', jwt);
+                console.log('jwt', jwt);
                 return [4 /*yield*/, (0, jwt_handle_1.verifyToken)("".concat(jwt))];
             case 1:
                 tokenData = _a.sent();
+                console.log('tokenData', tokenData);
                 return [4 /*yield*/, user_1.default.findById(tokenData._id)];
             case 2:
                 userData_1 = _a.sent();

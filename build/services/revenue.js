@@ -78,10 +78,12 @@ var insertOrUpdateRevenueWorkingDay = function (revenue) { return __awaiter(void
             case 1:
                 resultUpdate = _b.sent();
                 return [2 /*return*/, resultUpdate];
-            case 2: return [4 /*yield*/, (0, turn_1.validTurn)(revenue.users, 'Active')];
+            case 2:
+                console.log('revenue.users', revenue.users);
+                return [4 /*yield*/, (0, turn_1.validTurn)(revenue.users, 'Active')];
             case 3:
                 validTurnR = _b.sent();
-                // console.log('data', validTurnR)
+                console.log('data validTurnR', validTurnR);
                 // return validTurnR;
                 if (Object.keys(validTurnR).length <= 0) {
                     resError = {
@@ -442,14 +444,13 @@ var getRevenueTurn = function (revenue) { return __awaiter(void 0, void 0, void 
                     filter.type = type;
                 }
                 console.log('filter get-revenue-turn', filter);
-                if (users !== "" && role !== 'Admin') {
-                    console.log('ingreso es users');
-                    // filter.users = new ObjectId(users) ;
-                    filter.users = new Objectid(users);
-                }
-                else {
-                    console.log('es admin');
-                }
+                // if (users !== "" && role !== 'Admin') {
+                //     console.log('ingreso es users')
+                //     // filter.users = new ObjectId(users) ;
+                //     filter.users = new Objectid(users);
+                // } else {
+                //     console.log('es admin')
+                // }
                 // console.log('turn', users)
                 // return workingDay;
                 // if (workingDay !== null) {

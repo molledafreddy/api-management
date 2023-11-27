@@ -15,5 +15,6 @@ router.get('/:id', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'A
 router.put('/:id', turn_1.updateTurn);
 router.post('/', session_1.checkJwt, turn_1.postTurn);
 router.delete('/:id', turn_1.deleteTurn);
+router.get('/validTurn/:id', turn_1.getValidTurn);
 // logMiddleware,
 router.get('/search/for/user', session_1.checkJwt, (0, roleAuth_1.checkRoleAuth)(['User', 'Admin']), turn_1.getTurnsForUser);

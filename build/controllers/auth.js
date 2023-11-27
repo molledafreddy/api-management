@@ -57,12 +57,14 @@ exports.registerCtrl = registerCtrl;
 var loginCtrl = function (_a, res) {
     var body = _a.body;
     return __awaiter(void 0, void 0, void 0, function () {
-        var email, password, responseUser;
+        var email, password, dataEmail, responseUser;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
+                    console.log('data body', body);
                     email = body.email, password = body.password;
-                    return [4 /*yield*/, (0, auth_1.loginUser)({ email: email, password: password })];
+                    dataEmail = email.toLowerCase();
+                    return [4 /*yield*/, (0, auth_1.loginUser)({ email: dataEmail, password: password })];
                 case 1:
                     responseUser = _b.sent();
                     if (responseUser === "NOT_FOUND_USER") {

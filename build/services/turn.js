@@ -161,11 +161,15 @@ var validTurn = function (userId, statusP) { return __awaiter(void 0, void 0, vo
                     yy: now.getFullYear().toString().slice(-2),
                     yyyy: now.getFullYear()
                 };
-                dateStr = new Date(formatoMap.yyyy, formatoMap.mm - 1, formatoMap.dd, 0, 0, 0, 0);
+                dateStr = new Date(formatoMap.yyyy, formatoMap.mm - 1, formatoMap.dd - 1, 0, 0, 0, 0);
                 nextDate = new Date(formatoMap.yyyy, formatoMap.mm - 1, formatoMap.dd, 23, 59, 59, 999);
-                filter.createdAt = { $gte: dateStr, $lt: nextDate };
+                // filter.createdAt = {$gte: dateStr, $lt: nextDate}
+                console.log('filter.createdAt', filter);
+                console.log('dateStr', dateStr);
+                console.log('nextDate', nextDate);
                 return [4 /*yield*/, turn_1.default.find({
-                        createdAt: { $gte: dateStr, $lt: nextDate },
+                        // createdAt: { $gte: dateStr, $lt: nextDate},
+                        startDate: { $gte: dateStr, $lt: nextDate },
                         status: status,
                         users: userId
                     })];

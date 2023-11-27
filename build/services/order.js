@@ -290,8 +290,10 @@ var searchOrderPaitOut = function (order) { return __awaiter(void 0, void 0, voi
                     // var dateStr = new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,0,0,0,0);
                     // var nextDate = new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,23,59,59, 999);
                     filter.paymentDate = {
+                        // $gte: new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd-2,23,59,59, 999), 
+                        // $lt:  new Date(formatoMap.yyyy,formatoMap.mm,formatoMap.dd,23,59,59, 999)
                         $gte: new Date(formatoMap.yyyy, formatoMap.mm, formatoMap.dd, 0, 0, 0, 0),
-                        $lt: new Date(formatoMap.yyyy, formatoMap.mm, formatoMap.dd, 23, 59, 59, 999)
+                        $lt: new Date(formatoMap.yyyy, formatoMap.mm, formatoMap.dd - 1, 23, 59, 59, 999)
                     };
                     // const formatoMap = {
                     //     dd: now.getDate(),
@@ -424,7 +426,7 @@ var getOrderDetail = function (id) { return __awaiter(void 0, void 0, void 0, fu
                 filtro = {
                     _id: new mongoose_1.default.Types.ObjectId('6372308ba15b0459089cf6e0'),
                     providers: new mongoose_1.default.Types.ObjectId('6358403b25b29d9b3d42846c'),
-                    status: 'paid_out',
+                    status: 'pagado',
                     // EstimateReceptionDate:{
                     //     $gte: dateStr,
                     //     $lt: nextDate
@@ -472,7 +474,7 @@ var getOrderDetail = function (id) { return __awaiter(void 0, void 0, void 0, fu
 }); };
 exports.getOrderDetail = getOrderDetail;
 var validPaidOrder = function (order) {
-    if (order.status === "paid_out" && order.amountPaid <= 0) {
+    if (order.status === "pagado" && order.amountPaid <= 0) {
         return "NOT_FOUND_AMOUNT";
     }
     // return "paso la validacion";
@@ -510,7 +512,7 @@ var insertOrUpdateOrder = function (order) { return __awaiter(void 0, void 0, vo
                     return [2 /*return*/, "PROVEEDOR_NOT_FOUND"];
                 }
                 // return [order];
-                if (order.status != "paid_out"
+                if (order.status != "pagado"
                     && order.estimatedAmount <= 0) {
                     return [2 /*return*/, "NOT_FOUND_ESTIMATED_AMOUNT"];
                 }
@@ -522,7 +524,7 @@ var insertOrUpdateOrder = function (order) { return __awaiter(void 0, void 0, vo
                 //     && Object.entries(order?.egress as any).length > 0) {
                 //     return "INFORMATION_EGREES_WITH_DATA";
                 // }
-                if (order.status === "paid_out") {
+                if (order.status === "pagado") {
                     value = validPaidOrder(order);
                     if (value != "VALID_SUCCESS") {
                         return [2 /*return*/, value];

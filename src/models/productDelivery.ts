@@ -14,7 +14,8 @@ const productDeliverySchema: Schema = new Schema <ProductDelivery> (
         },
         products: [{
             type: Schema.Types.ObjectId,
-            ref: 'products'
+            ref: 'products',
+            required: false,
         }],
         deliveryOrder: [{
             type: Schema.Types.ObjectId,

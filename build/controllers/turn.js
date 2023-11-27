@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTurn = exports.postTurn = exports.updateTurn = exports.getTurnsForUser = exports.getTurns = exports.getTurn = void 0;
+exports.deleteTurn = exports.postTurn = exports.updateTurn = exports.getTurnsForUser = exports.getTurns = exports.getValidTurn = exports.getTurn = void 0;
 var turn_1 = require("../services/turn");
 var error_handle_1 = require("../utils/error.handle");
 var getTurn = function (_a, res) {
@@ -64,36 +64,38 @@ var getTurn = function (_a, res) {
     });
 };
 exports.getTurn = getTurn;
+var getValidTurn = function (_a, res) {
+    var params = _a.params;
+    return __awaiter(void 0, void 0, void 0, function () {
+        var id, response_2, data, e_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    id = params.id;
+                    return [4 /*yield*/, (0, turn_1.validTurn)(id, 'Active')];
+                case 1:
+                    response_2 = _b.sent();
+                    data = response_2 ? response_2 : "NOT_FOUND_VALID_TURN";
+                    res.send(data);
+                    return [3 /*break*/, 3];
+                case 2:
+                    e_2 = _b.sent();
+                    (0, error_handle_1.handleHttp)(res, "ERROR_GET_VALID_TURN");
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+};
+exports.getValidTurn = getValidTurn;
 var getTurns = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var response_2, e_2;
+    var response_3, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, (0, turn_1.getCars)()];
-            case 1:
-                response_2 = _a.sent();
-                res.send(response_2);
-                return [3 /*break*/, 3];
-            case 2:
-                e_2 = _a.sent();
-                (0, error_handle_1.handleHttp)(res, "ERROR_GET_TURNS");
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.getTurns = getTurns;
-var getTurnsForUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, query, response_3, e_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                user = req.user, query = req.query;
-                query.users = "".concat(user === null || user === void 0 ? void 0 : user._id);
-                console.log('datos query', query);
-                return [4 /*yield*/, (0, turn_1.searchTurnForUser)(query)];
             case 1:
                 response_3 = _a.sent();
                 res.send(response_3);
@@ -106,11 +108,34 @@ var getTurnsForUser = function (req, res) { return __awaiter(void 0, void 0, voi
         }
     });
 }); };
+exports.getTurns = getTurns;
+var getTurnsForUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, query, response_4, e_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                user = req.user, query = req.query;
+                query.users = "".concat(user === null || user === void 0 ? void 0 : user._id);
+                console.log('datos query', query);
+                return [4 /*yield*/, (0, turn_1.searchTurnForUser)(query)];
+            case 1:
+                response_4 = _a.sent();
+                res.send(response_4);
+                return [3 /*break*/, 3];
+            case 2:
+                e_4 = _a.sent();
+                (0, error_handle_1.handleHttp)(res, "ERROR_GET_TURNS");
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
 exports.getTurnsForUser = getTurnsForUser;
 var updateTurn = function (_a, res) {
     var params = _a.params, body = _a.body;
     return __awaiter(void 0, void 0, void 0, function () {
-        var id, response_4, e_4;
+        var id, response_5, e_5;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -118,11 +143,11 @@ var updateTurn = function (_a, res) {
                     id = params.id;
                     return [4 /*yield*/, (0, turn_1.updateCar)(id, body)];
                 case 1:
-                    response_4 = _b.sent();
-                    res.send(response_4);
+                    response_5 = _b.sent();
+                    res.send(response_5);
                     return [3 /*break*/, 3];
                 case 2:
-                    e_4 = _b.sent();
+                    e_5 = _b.sent();
                     (0, error_handle_1.handleHttp)(res, "ERROR_UPDATE_TURNS");
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
@@ -132,7 +157,7 @@ var updateTurn = function (_a, res) {
 };
 exports.updateTurn = updateTurn;
 var postTurn = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, body, responseTurn, e_5;
+    var user, body, responseTurn, e_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -146,8 +171,8 @@ var postTurn = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 res.send(responseTurn);
                 return [3 /*break*/, 3];
             case 2:
-                e_5 = _a.sent();
-                (0, error_handle_1.handleHttp)(res, "ERROR_POST_TURNS", e_5);
+                e_6 = _a.sent();
+                (0, error_handle_1.handleHttp)(res, "ERROR_POST_TURNS", e_6);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -157,7 +182,7 @@ exports.postTurn = postTurn;
 var deleteTurn = function (_a, res) {
     var params = _a.params;
     return __awaiter(void 0, void 0, void 0, function () {
-        var id, response_5, e_6;
+        var id, response_6, e_7;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -165,11 +190,11 @@ var deleteTurn = function (_a, res) {
                     id = params.id;
                     return [4 /*yield*/, (0, turn_1.deleteCar)(id)];
                 case 1:
-                    response_5 = _b.sent();
-                    res.send(response_5);
+                    response_6 = _b.sent();
+                    res.send(response_6);
                     return [3 /*break*/, 3];
                 case 2:
-                    e_6 = _b.sent();
+                    e_7 = _b.sent();
                     (0, error_handle_1.handleHttp)(res, "ERROR_DELETE_TURNS");
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];

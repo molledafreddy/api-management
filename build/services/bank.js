@@ -45,7 +45,9 @@ var getBanks = function () { return __awaiter(void 0, void 0, void 0, function (
     var responseItem;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, bank_1.default.find({})];
+            case 0:
+                console.log('llego por aca getBanks');
+                return [4 /*yield*/, bank_1.default.find({})];
             case 1:
                 responseItem = _a.sent();
                 return [2 /*return*/, responseItem];

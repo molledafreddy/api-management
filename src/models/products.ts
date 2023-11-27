@@ -47,12 +47,14 @@ ProductSchema.plugin(paginate);
 
 interface ProductDocument extends mongoose.Document, Product {}
 
-// ProductSchema.index({ 
-//     name: 'text', 
-//     price: 'text', 
-//     type: 'text',
-//     status: 'text',
-// });
+ProductSchema.index({ 
+    clasification: 'text',
+    name: 'text',
+    description: 'text', 
+    price: 'text', 
+    type: 'text',
+    status: 'text',
+});
 
 const ProductModel = mongoose.model<
 ProductDocument,
