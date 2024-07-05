@@ -25,7 +25,12 @@ const UserSchema: Schema = new Schema <User> (
             type: String,
             default: 'User',
             required: true
-        }
+        },
+        phone: {
+            type:String,
+            unique: false,
+            required: false
+        },
     }, 
     {
         timestamps: true,

@@ -24,7 +24,12 @@ var UserSchema = new mongoose_1.Schema({
         type: String,
         default: 'User',
         required: true
-    }
+    },
+    phone: {
+        type: String,
+        unique: false,
+        required: false
+    },
 }, {
     timestamps: true,
     versionKey: false

@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { getOrders } from "../controllers/order";
+import { getUsersNumber } from "../controllers/user";
 import { logMiddleware } from "../middleware/log";
 import { checkJwt } from "../middleware/session";
 
@@ -16,6 +17,7 @@ const router = Router()
  * http://localhost:3002/items [GET]
  */
 router.get('/', checkJwt, getOrders);
+router.get('/number',  getUsersNumber);
 // router.get('/:id', logMiddleware, getItem);
 // router.put('/:id', updateItem);
 // router.post('/', postItem);
