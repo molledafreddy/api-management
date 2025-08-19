@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/app.ts"
+    "dev": "nodemon ./src/app.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "nodemon ./src/app.ts",
+    "watch:server": "nodemon './dist/src/app.js' --watch './dist'"
   },
   "keywords": [],
   "author": "",
@@ -39,7 +42,12 @@
     "@types/jsonwebtoken": "^8.5.9",
     "@types/mongoose": "^5.11.97",
     "@types/multer": "^1.4.7",
+    "@types/node": "^16.11.7",
     "@types/sharp": "^0.31.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.2"
   }
 }
