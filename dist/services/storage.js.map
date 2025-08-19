@@ -1,0 +1,1 @@
+{"version":3,"file":"storage.js","sourceRoot":"","sources":["../../src/services/storage.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;AAEA,gEAA6C;AAE7C,MAAM,cAAc,GAAG,KAA0C,EAAE,4CAArC,EAAC,QAAQ,EAAE,MAAM,EAAE,IAAI,EAAU;IAC3D,MAAM,cAAc,GAAG,MAAM,iBAAY,CAAC,MAAM,CAAC,EAAC,QAAQ,EAAE,MAAM,EAAE,IAAI,EAAC,CAAC,CAAC;IAC3E,OAAO,cAAc,CAAC;AAC1B,CAAC,CAAA,CAAA;AAIQ,wCAAc"}
