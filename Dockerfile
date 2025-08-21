@@ -1,15 +1,32 @@
 # FROM node:22-bullseye
-FROM node:18-bullseye
+#Build stage
+FROM node:18-bullseye as build
     
 RUN npm cache clean --force
 
 WORKDIR /app
 COPY package*.json ./
 
-COPY . .
 RUN npm install
+COPY . .
 
+RUN npm run build
+
+#Production stage
+FROM node:18-bullseye AS production
+
+WORKDIR /app
+
+COPY package*.json .
+
+RUN npm ci --only=production
+
+COPY --from=build /app/dist ./
 
 EXPOSE 8080
 
-CMD [ "npm", "run", "start" ]
+CMD ["node", "app.js"]
+
+
+
+
