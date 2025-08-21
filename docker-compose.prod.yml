@@ -1,0 +1,9 @@
+versión:  "3.7" 
+servicios: 
+ api: 
+  compilación: 
+   contexto:  . 
+   destino:  producción 
+
+  puertos: 
+   -  8080:8080
