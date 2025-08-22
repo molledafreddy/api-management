@@ -25,6 +25,11 @@ COPY --from=build /app/dist ./
 
 EXPOSE 8080
 
+# Specify the variable you need
+ARG DB_URI
+# Use the variable
+RUN echo $DB_URI
+
 CMD ["node", "app.js"]
 
 
