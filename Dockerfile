@@ -16,6 +16,10 @@ RUN npm run build
 FROM node:18-bullseye AS production
 
 WORKDIR /app
+# Specify the variable you need
+ARG DB_URI
+# Use the variable
+RUN echo $DB_URI
 
 COPY package*.json .
 
@@ -25,10 +29,6 @@ COPY --from=build /app/dist ./
 
 EXPOSE 8080
 
-# Specify the variable you need
-ARG DB_URI
-# Use the variable
-RUN echo $DB_URI
 
 CMD ["node", "app.js"]
 
