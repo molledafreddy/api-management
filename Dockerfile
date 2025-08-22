@@ -23,7 +23,7 @@ WORKDIR /
 
 # Usar ARG para que Railway pueda pasar el valor durante la construcción
 ENV DB_URI="default_value"
-
+RUN echo "¡Hola, Docker!"
 COPY package*.json .
 
 RUN npm ci --only=production
