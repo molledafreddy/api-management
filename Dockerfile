@@ -3,7 +3,7 @@
 FROM node:18-bullseye as build
     
 RUN npm cache clean --force
-
+ENV DB_URI="default_value"
 WORKDIR /app
 COPY package*.json ./
 
@@ -12,7 +12,7 @@ COPY . .
 
 # Usar ARG para que Railway pueda pasar el valor durante la construcción
 # Usar ENV para que el valor sea una variable de entorno en el contenedor
-ENV DB_URI="default_value"
+
 
 RUN npm run build
 
