@@ -20,7 +20,8 @@ RUN npm run build
 #Production stage
 FROM node:18-bullseye AS production
 
-WORKDIR /app
+WORKDIR /
+
 # Usar ARG para que Railway pueda pasar el valor durante la construcción
 ARG DB_URI
 # Usar ENV para que el valor sea una variable de entorno en el contenedor
