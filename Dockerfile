@@ -16,10 +16,10 @@ RUN npm run build
 FROM node:18-bullseye AS production
 
 WORKDIR /app
-# Specify the variable you need
+# Usar ARG para que Railway pueda pasar el valor durante la construcción
 ARG DB_URI
-# Use the variable
-RUN echo $DB_URI
+# Usar ENV para que el valor sea una variable de entorno en el contenedor
+ENV DB_URI=$DB_URI
 
 COPY package*.json .
 
