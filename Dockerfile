@@ -1,11 +1,11 @@
 # FROM node:22-bullseye
 #Build stage
 FROM node:18-bullseye as build
-ARG RAILWAY_PRIVATE_DOMAIN
-RUN echo "La variable de entorno es: $RAILWAY_PRIVATE_DOMAIN"
+ARG DB_URI
+RUN echo "La variable de entorno es: $DB_URI"
 
 RUN npm cache clean --force
-ENV RAILWAY_PRIVATE_DOMAIN=$RAILWAY_PRIVATE_DOMAIN
+ENV DB_URI=$DB_URI
 WORKDIR /app
 COPY package*.json ./
 
