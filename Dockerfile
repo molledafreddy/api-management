@@ -5,7 +5,7 @@ ARG DB_URI
 RUN echo "La variable de entorno es: $DB_URI"
 
 RUN npm cache clean --force
-ENV DB_URI="default_value"
+ENV DB_URI=$DB_URI
 WORKDIR /app
 COPY package*.json ./
 
@@ -24,7 +24,8 @@ FROM node:18-bullseye AS production
 WORKDIR /
 
 # Usar ARG para que Railway pueda pasar el valor durante la construcción
-ENV DB_URI="default_value"
+# Usar ENV para que el valor sea una variable de entorno en el contenedor
+ENV DB_URI=$DB_URI
 RUN echo "¡Hola, Docker!"
 COPY package*.json .
 
