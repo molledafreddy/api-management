@@ -1,9 +1,7 @@
 # FROM node:22-bullseye
 #Build stage
 FROM node:18-bullseye as build
-#ARG DB_URI
-ENV DB_URI="mongodb+srv://molledafreddy:magallanes2721.@cluster0.1e16p.mongodb.net/app-manager?retryWrites=true&w=majority&appName=Cluster0"
-RUN echo "La variable de entorno es: $DB_URI"
+
 
 RUN npm cache clean --force
 WORKDIR /app
@@ -20,6 +18,10 @@ RUN npm run build
 
 #Production stage
 FROM node:18-bullseye AS production
+
+#ARG DB_URI
+ENV DB_URI="mongodb+srv://molledafreddy:magallanes2721.@cluster0.1e16p.mongodb.net/app-manager?retryWrites=true&w=majority&appName=Cluster0"
+RUN echo "La variable de entorno es: $DB_URI"
 
 WORKDIR /
 
