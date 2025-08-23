@@ -1,7 +1,9 @@
 # FROM node:22-bullseye
 #Build stage
 FROM node:18-bullseye as build
-    
+ARG DB_URI   
+RUN echo "La variable de entorno es: $DB_URI"
+
 RUN npm cache clean --force
 ENV DB_URI="default_value"
 WORKDIR /app
