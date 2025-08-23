@@ -5,7 +5,7 @@ ARG DB_URI
 RUN echo "La variable de entorno es: $DB_URI"
 
 RUN npm cache clean --force
-ENV DB_URI=$DB_URI
+ENV DB_URI="mongodb+srv://molledafreddy:magallanes2721.@cluster0.1e16p.mongodb.net/app-manager?retryWrites=true&w=majority&appName=Cluster0"
 WORKDIR /app
 COPY package*.json ./
 
