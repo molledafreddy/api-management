@@ -14,8 +14,7 @@ const mongoose_1 = require("mongoose");
 // const NODE_ENV = process.env.NODE_ENV;
 function dbConnect() {
     return __awaiter(this, void 0, void 0, function* () {
-        //const DB_URI = <string>process.env.DB_URI;
-        const DB_URI = 'mongodb+srv://molledafreddy:magallanes2721.@cluster0.1e16p.mongodb.net/app-manager?retryWrites=true&w=majority&appName=Cluster0';
+        const DB_URI = process.env.DB_URI;
         console.log(DB_URI);
         yield (0, mongoose_1.connect)(DB_URI);
     });
