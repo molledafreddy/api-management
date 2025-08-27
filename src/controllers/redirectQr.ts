@@ -12,7 +12,7 @@ const getRedirectQr = async ({params}: Request, res: Response) => {
       let mensaje = "¡Hola! Vengo de la aplicación.";
       let mensajeEncoded = encodeURIComponent(mensaje); // Codificar el mensaje /?text=${mensajeEncoded}
 
-      let apiWhatsapp = `https://wa.me/${numero}?text=I'm%20interested%20in%20your%20car%20for%20sale`;
+      let apiWhatsapp = `https://wa.me/${numero}?text=Me%20gustaria%20Realizar%20un%20Pedido`;
 
       // Responde al cliente con el enlace
       res.redirect(302, apiWhatsapp);
