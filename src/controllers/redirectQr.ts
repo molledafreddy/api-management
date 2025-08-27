@@ -6,27 +6,16 @@ import { handleHttp } from "../utils/error.handle";
 
 const getRedirectQr = async ({params}: Request, res: Response) => {
   try {
-    console.log("aaaaaa");
       const {id} = params;
-      const link = `https://wa.me/qr/VUWTFMISM33CL1`;
-
+      
       let numero = "56936499908"; // Número de teléfono del destinatario
       let mensaje = "¡Hola! Vengo de la aplicación.";
       let mensajeEncoded = encodeURIComponent(mensaje); // Codificar el mensaje /?text=${mensajeEncoded}
 
-      let urlWhatsapp = `https://wa.me/${numero}`;
+      let apiWhatsapp = `https://wa.me/${numero}?text=I'm%20interested%20in%20your%20car%20for%20sale`;
 
       // Responde al cliente con el enlace
-      const data = {
-        status: 200,
-        body: {
-          message: "Haz clic para contactarnos",
-          whatsapp_link: urlWhatsapp
-        }
-      };
-     // const response = await bank(id);
-     // const data = response ? response : "NOT_FOUNDsss";
-      res.send(urlWhatsapp);
+      res.redirect(302, apiWhatsapp);
   } catch (e) {
       handleHttp(res, "ERROR_GET_BANK")
   }
