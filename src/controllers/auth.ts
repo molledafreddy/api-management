@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { registerNewUser, loginUser } from "../services/auth";
 
 const registerCtrl = async ({body}: Request, res: Response ) => {
+    console.log('📋 Registro de usuario:', body);
     const responseUser = await registerNewUser(body);
     res.send(responseUser);
 };
