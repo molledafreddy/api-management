@@ -2,8 +2,13 @@ import { Request } from "express";
 // import express from "express";
 import fileUpload from "express-fileupload";
 import multer, { diskStorage } from "multer";
+import fs from "fs-extra";
+import path from "path";
 
-const PATH_STORAGE = `${process.cwd()}/storage`;
+const PATH_STORAGE = path.join(process.cwd(), "storage");
+
+// Crear directorio si no existe
+fs.ensureDirSync(PATH_STORAGE);
 
 const storage = diskStorage({
   destination(req: Request, file: Express.Multer.File, cb: any) {
