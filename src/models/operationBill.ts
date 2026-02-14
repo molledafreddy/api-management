@@ -1,7 +1,7 @@
 import  mongoose, { Schema, Types, model, Model } from "mongoose";
 import { OperationBills } from "../interfaces/operation-bills.interface";
 import paginate from 'mongoose-paginate-v2';
-
+  
 const OperationBillSchema: Schema = new Schema <OperationBills> (
     {
         amount: {
@@ -10,24 +10,25 @@ const OperationBillSchema: Schema = new Schema <OperationBills> (
         },
         type: {
             type: String,
-            enum: ['salary', 
-                   'administrative', 
-                   'accountant', 
-                   'investment', 
-                   'light_service', 
-                   'water_service', 
-                   'common_expense', 
-                   'decrease', 
-                   'rent', 
-                   'cleaning_products', 
-                   'profits', 
-                   'construction_materials', 
-                   'workforce', 
-                   'implements', 
-                   'remodeling', 
-                   'publicity', 
-                   'innovation',
-                   'other' 
+            enum: ['salario', 
+                   'administrativo', 
+                   'contador', 
+                   'inversion', 
+                   'servicio_electrico', 
+                   'servicio_agua', 
+                   'gastos_comunes', 
+                   'disminucion', 
+                   'alquiler', 
+                   'productos_limpieza', 
+                   'ganancias', 
+                   'materiales_construccion', 
+                   'personal', 
+                   'implementos', 
+                   'remodelacion', 
+                   'publicidad', 
+                   'innovacion',
+                   'beneficios',
+                   'otros' 
             ],
             required: true
         },

@@ -51,7 +51,7 @@ const getOrder = async (_id:string) => {
        if (Object.entries(responseItem as any).length > 0) {
             response.docs = responseItem as any;
         }
-        
+        console.log('responseItem', responseItem)
         return response;
     } catch (error) {
         console.log('error', error)
@@ -311,7 +311,7 @@ const getOrderDetail = async (id:string) => {
     filtro = { 
         _id: new mongoose.Types.ObjectId('6372308ba15b0459089cf6e0'),
         providers: new mongoose.Types.ObjectId('6358403b25b29d9b3d42846c'),
-        status: 'paid_out',
+        status: 'pagado',
         // EstimateReceptionDate:{
         //     $gte: dateStr,
         //     $lt: nextDate
@@ -359,7 +359,7 @@ const getOrderDetail = async (id:string) => {
 
 
 const validPaidOrder = (order: RequestOrder): string => {
-    if (order.status === "paid_out" && order.amountPaid as number  <=0 ) {
+    if (order.status === "pagado" && order.amountPaid as number  <=0 ) {
         return "NOT_FOUND_AMOUNT";
     }
     // return "paso la validacion";
@@ -398,20 +398,20 @@ const insertOrUpdateOrder = async (order: RequestOrder) => {
         return "PROVEEDOR_NOT_FOUND";
     }
     // return [order];
-    if (order.status != "paid_out" 
+    if (order.status != "pagado" 
         && order.estimatedAmount as number  <= 0) {
         return "NOT_FOUND_ESTIMATED_AMOUNT";
     }
     // console.log('orderorderorder', order)
     // return [order];
     // return "paso la validacion";
-    // if (order.status != "paid_out" 
+    // if (order.status != "pagado" 
     //     && order.egress != undefined 
     //     && Object.entries(order?.egress as any).length > 0) {
     //     return "INFORMATION_EGREES_WITH_DATA";
     // }
     
-    if (order.status === "paid_out") {
+    if (order.status === "pagado") {
         const value = validPaidOrder(order);
         if (value != "VALID_SUCCESS") {
             return value;
@@ -438,7 +438,6 @@ const insertOrUpdateOrder = async (order: RequestOrder) => {
     let dataFiles: any = [];
     // console.log('archivos', operation.files)
     if (Object.keys(order.files as any).length > 0) {
-        console.log('ingreso tiene archivos');
             order.files?.forEach(element => {
             // console.log('element',element)
             dataFiles.push({
@@ -486,7 +485,7 @@ const insertOrder = async (idWorkingDay: string, data: RequestOrder) => {
     
         const responseInsert = await LogisticOrderModel.create(dataLogistic);
         console.log('responseInsert Logistinc', responseInsert)
-        // if (data.status === 'paid_out') {
+        // if (data.status === 'pagado') {
             // console.log('ingreso aca createEgress')
             createEgress(responseInsertOrder._id as string, data)
         // }  
@@ -559,13 +558,12 @@ const getEgress = async (orderId: string) => {
 }
 
 const updateOrder = async (id:string, idWorkingDay: string, data: RequestOrder) => {
-    console.log('updateOrder', data)
     const responseItem = await OrderModel.findOneAndUpdate(
         {_id: id },
         data,
         { new: true }
     );
-    console.log('responseItem actualizacion de orden', responseItem);
+    // console.log('responseItem actualizacion de orden', responseItem);
     // return responseItem;
     // id as string
     const resultGet = await getOrder(id as string);
@@ -591,7 +589,7 @@ const updateOrder = async (id:string, idWorkingDay: string, data: RequestOrder) 
         // console.log('ingreso else debe crear egreseo')
         createEgress(id as string as string, data)
     }
-    // if (data.status === 'paid_out') {
+    // if (data.status === 'pagado') {
         
         // return resultEgress;
     // }
@@ -600,17 +598,8 @@ const updateOrder = async (id:string, idWorkingDay: string, data: RequestOrder) 
 }
 
 const updateEgress = async (orderId: string, data: RequestOrder) => {
-    // console.log('valor', data)
-    // return data;
     const validEgress = await getEgress(orderId)
-    console.log('data orden', data)
-    console.log('validEgress inreso a la actualizacion del ingreso',orderId, validEgress)
     if (Object.keys(validEgress).length > 0) {
-        // console.log("ingreso se creara un abono")
-        // console.log("ingreso se creara un abono")
-        console.log("ingreso se creara un abono data?.dataFiles", data?.dataFiles)
-        console.log("ingreso se creara un abono data?.files", data?.files)
-       
         const dataEgress: Egress = {
             invoiceNumber: data.egress?.invoiceNumber,
             orders: orderId,
@@ -619,13 +608,10 @@ const updateEgress = async (orderId: string, data: RequestOrder) => {
             type: 'orders',
             paymentDate: data?.paymentDate,
         }
-        console.log('modelo egreso', dataEgress)
         let infoFile: any = [];
         if (Object.keys(data?.dataFiles as any).length > 0 && Object.keys(data?.files as any).length > 0) {
-            // infoFile.push(data?.files);
-            console.log('ingreso tiene datafiles y files')
             
-            await data?.dataFiles?.forEach(element => {
+            data?.dataFiles?.forEach(element => {
                 infoFile.push({
                     filename: element.filename,
                     path:element.path as string,
@@ -636,7 +622,7 @@ const updateEgress = async (orderId: string, data: RequestOrder) => {
                 
             });
 
-            await data?.files?.forEach(element => {
+            data?.files?.forEach(element => {
                 infoFile.push({
                     filename: element.filename,
                     path:element.path as string,
@@ -646,14 +632,9 @@ const updateEgress = async (orderId: string, data: RequestOrder) => {
                 });
                 
             });
-            console.log('infoFiles', infoFile)
 
-            // infoFile.push(data?.files as any);
             dataEgress.files = infoFile
-            // console.log('infoFiles dataEgress', dataEgress)
         } else if(Object.keys(data?.files as any).length > 0){
-            // infoFile = data?.files as any;
-            console.log('ingreso tiene files')
             dataEgress.files = data.files;
         } else if(Object.keys(data?.dataFiles as any).length > 0){
             await data?.dataFiles?.forEach(element => {
@@ -669,17 +650,13 @@ const updateEgress = async (orderId: string, data: RequestOrder) => {
             dataEgress.files = infoFile
         }
 
-        console.log("dataEgress", dataEgress)
         const responseInsertE = await EgressModel.findOneAndUpdate(
             {_id: data?.egress?._id },
             dataEgress,
             { new: true }
         );
 
-        console.log('resultado egresos', responseInsertE)
-
         const deleteI = await paymentTypeHasEgressModel.deleteMany({egress: data?.egress?._id});
-        console.log('data.egress?.paymentHasEgress', data.egress?.paymentHasEgress)
         if (Object.keys(data.egress?.paymentHasEgress as any).length > 0 ) {
             // let dataPayment: any = [];
             const resultPayments = await getPaymentTypes();
@@ -699,13 +676,10 @@ const updateEgress = async (orderId: string, data: RequestOrder) => {
                             egress: data?.egress?._id as string,
                             paymentAmount: item.paymentAmount ,
                         }
-                        
                         dataPayment.push(dataPaymentTypeHasEgress)
-                    
                 });
                 
                 const responseInsertP = await paymentTypeHasEgressModel.insertMany(dataPayment);
-                console.log('responseInsertP', responseInsertP)
             }
         }
         return dataEgress; 

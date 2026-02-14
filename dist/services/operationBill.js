@@ -127,15 +127,12 @@ const createEgress = (operationId, data) => __awaiter(void 0, void 0, void 0, fu
 });
 const updateEgress = (operationId, data) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j;
-    console.log('valor', data);
     // return data;
     const validEgress = yield getEgress(operationId);
     // console.log('validEgress', validEgress)
     if (Object.keys(validEgress).length == 0) {
         // console.log("ingreso se creara un abono")
         // console.log("ingreso se creara un abono")
-        console.log("ingreso se creara un abono data?.dataFiles", data === null || data === void 0 ? void 0 : data.dataFiles);
-        console.log("ingreso se creara un abono data?.files", data === null || data === void 0 ? void 0 : data.files);
         const dataEgress = {
             invoiceNumber: (_a = data.egress) === null || _a === void 0 ? void 0 : _a.invoiceNumber,
             operationBills: operationId,
@@ -163,7 +160,6 @@ const updateEgress = (operationId, data) => __awaiter(void 0, void 0, void 0, fu
                     mimetype: element.mimetype
                 });
             }));
-            console.log('infoFiles', infoFile);
             // infoFile.push(data?.files as any);
             dataEgress.files = infoFile;
             // console.log('infoFiles dataEgress', dataEgress)
@@ -183,7 +179,6 @@ const updateEgress = (operationId, data) => __awaiter(void 0, void 0, void 0, fu
             }));
             dataEgress.files = infoFile;
         }
-        console.log("dataEgress", dataEgress);
         const responseInsertE = yield egress_1.default.findOneAndUpdate({ _id: (_e = data === null || data === void 0 ? void 0 : data.egress) === null || _e === void 0 ? void 0 : _e._id }, dataEgress, { new: true });
         const deleteI = yield paymentTypeHasEgress_1.default.deleteMany({ egress: (_f = data === null || data === void 0 ? void 0 : data.egress) === null || _f === void 0 ? void 0 : _f._id });
         // return deleteI;
@@ -210,22 +205,9 @@ const updateEgress = (operationId, data) => __awaiter(void 0, void 0, void 0, fu
                     dataPayment.push(dataPaymentTypeHasEgress);
                 }));
                 const responseInsertP = yield paymentTypeHasEgress_1.default.insertMany(dataPayment);
-                console.log('responseInsertP', responseInsertP);
             }
-            // let dataPayment: any = [];
-            // await data.egress?.paymentHasEgress?.forEach(
-            //     (item: any) => {
-            //     const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
-            //         payments: item.payments,
-            //         egress: data?.egress?._id as string,
-            //         paymentAmount: item.paymentAmount,
-            //     }
-            //     dataPayment.push(dataPaymentTypeHasEgress)
-            // });
-            // const resulttype = await paymentTypeHasEgressModel.insertMany(dataPayment);
-            // console.log('resulttype', resulttype)
         }
-        // return dataEgress; 
+        return responseInsertE;
     }
 });
 const getEgress = (orderId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -327,7 +309,6 @@ const getOperationBill = (id) => __awaiter(void 0, void 0, void 0, function* () 
         valid = { _id: new ObjectId(id) };
         // valid = {"_id":{$eq:new ObjectId("63f7ebee0e2be4525a156238")}}
         // valid = {type: 'cleaning_products'};
-        console.log('llego por aca', valid);
         // await new mongoose.Types.ObjectId('6358403b25b29d9b3d42846c')
         const responseItem = yield operationBill_1.default.aggregate([
             { $match: valid },

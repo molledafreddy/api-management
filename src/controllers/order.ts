@@ -27,6 +27,7 @@ const getOrder = async ({params}: RequestExt, res: Response) => {
   try {
         const {id} = params;
         const  responseItem = await order(id);
+        console.log('responseItem', responseItem)
         res.send(responseItem);
   } catch (e) {
     handleHttp(res, "ERROR_GET_ORDERS");
@@ -141,8 +142,11 @@ const postOrder = async (req: RequestExt, res: Response) => {
         egress: egress,
         users: user,
         type: 'orders',
+        validAdmin: valueOrder?.validAdmin,
+        validDate: valueOrder?.validDate,
+        noteValid: valueOrder?.noteValid
       }
-      // console.log('requestO', requestO)
+      console.log('requestO', requestO)
       // res.send(body);
       // return {body};
       // res.send(egress);

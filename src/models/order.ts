@@ -1,11 +1,11 @@
 import  mongoose, { Schema, Types, model, Model } from "mongoose";
 import { Order } from "../interfaces/order.interface";
-
+ 
 const OrderSchema: Schema = new Schema <Order> (
     {
         paymentMethod: {
             type: String,
-            enum: ["discounted", "credit", "partial", "consignment"],
+            enum: ["descontado", "credito", "parcial", "consignacion"],
             required: true
         },
         paymentDate: {
@@ -30,7 +30,7 @@ const OrderSchema: Schema = new Schema <Order> (
         },
         status: {
             type: String,
-            enum: ["requested", "received", "no_received", "verified", "cancelled", "cancelled_provider", "paid_out", "pending_for_payment"],
+            enum: ["solicitado", "recibido", "no_recibido", "verificado", "cancelado", "cancelado_proveedor", "pagado", "pendiente_por_pago"],
             required: true
         },
         estimatedAmount: {
@@ -44,7 +44,21 @@ const OrderSchema: Schema = new Schema <Order> (
         invoiceFile: {
             type: String,
         },
-        
+        validAdmin: {
+            type: String,
+            enum: ['Verificado', 'por_Verificado', 'con_error'],
+            required: false
+        },
+        validDate: {
+            type: Date,
+            default: Date.now,
+            required: false
+        },
+        noteValid: {
+            type: String,
+            default: '',
+            required: false
+        },
         providers: [{
             type: Schema.Types.ObjectId,
             ref: 'providers'
