@@ -4,7 +4,7 @@ const mongoose_1 = require("mongoose");
 const OrderSchema = new mongoose_1.Schema({
     paymentMethod: {
         type: String,
-        enum: ["discounted", "credit", "partial", "consignment"],
+        enum: ["descontado", "credito", "parcial", "consignacion"],
         required: true
     },
     paymentDate: {
@@ -29,7 +29,7 @@ const OrderSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: ["requested", "received", "no_received", "verified", "cancelled", "cancelled_provider", "paid_out", "pending_for_payment"],
+        enum: ["solicitado", "recibido", "no_recibido", "verificado", "cancelado", "cancelado_proveedor", "pagado", "pendiente_por_pago"],
         required: true
     },
     estimatedAmount: {
@@ -42,6 +42,21 @@ const OrderSchema = new mongoose_1.Schema({
     },
     invoiceFile: {
         type: String,
+    },
+    validAdmin: {
+        type: String,
+        enum: ['Verificado', 'por_Verificado', 'con_error'],
+        required: false
+    },
+    validDate: {
+        type: Date,
+        default: Date.now,
+        required: false
+    },
+    noteValid: {
+        type: String,
+        default: '',
+        required: false
     },
     providers: [{
             type: mongoose_1.Schema.Types.ObjectId,

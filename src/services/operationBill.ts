@@ -133,16 +133,12 @@ const createEgress = async (operationId: string, data: RequestOperationBills) =>
 }
 
 const updateEgress = async (operationId: string, data: RequestOperationBills) => {
-    console.log('valor', data)
     // return data;
     const validEgress = await getEgress(operationId)
     // console.log('validEgress', validEgress)
     if (Object.keys(validEgress).length == 0) {
         // console.log("ingreso se creara un abono")
         // console.log("ingreso se creara un abono")
-        console.log("ingreso se creara un abono data?.dataFiles", data?.dataFiles)
-        console.log("ingreso se creara un abono data?.files", data?.files)
-       
         const dataEgress: Egress = {
             invoiceNumber: data.egress?.invoiceNumber,
             operationBills: operationId,
@@ -175,7 +171,6 @@ const updateEgress = async (operationId: string, data: RequestOperationBills) =>
                 });
                 
             });
-            console.log('infoFiles', infoFile)
 
             // infoFile.push(data?.files as any);
             dataEgress.files = infoFile
@@ -196,7 +191,6 @@ const updateEgress = async (operationId: string, data: RequestOperationBills) =>
             dataEgress.files = infoFile
         }
 
-        console.log("dataEgress", dataEgress)
         const responseInsertE = await EgressModel.findOneAndUpdate(
             {_id: data?.egress?._id },
             dataEgress,
@@ -233,23 +227,9 @@ const updateEgress = async (operationId: string, data: RequestOperationBills) =>
                 });
                 
                 const responseInsertP = await paymentTypeHasEgressModel.insertMany(dataPayment);
-                console.log('responseInsertP', responseInsertP)
             }
-
-            // let dataPayment: any = [];
-            // await data.egress?.paymentHasEgress?.forEach(
-            //     (item: any) => {
-            //     const dataPaymentTypeHasEgress: paymentTypeHasEgress = {
-            //         payments: item.payments,
-            //         egress: data?.egress?._id as string,
-            //         paymentAmount: item.paymentAmount,
-            //     }
-            //     dataPayment.push(dataPaymentTypeHasEgress)
-            // });
-            // const resulttype = await paymentTypeHasEgressModel.insertMany(dataPayment);
-            // console.log('resulttype', resulttype)
         }
-        // return dataEgress; 
+         return responseInsertE; 
     }
     
       
@@ -367,7 +347,6 @@ const getOperationBill = async (id:string) => {
         valid = { _id: new ObjectId(id)};
         // valid = {"_id":{$eq:new ObjectId("63f7ebee0e2be4525a156238")}}
         // valid = {type: 'cleaning_products'};
-        console.log('llego por aca', valid)
         // await new mongoose.Types.ObjectId('6358403b25b29d9b3d42846c')
         
         const responseItem = await OperationBillSchemaModel.aggregate([

@@ -58,7 +58,6 @@ const getPaymentHasEgress = async ({params}: RequestExt, res: Response) => {
 
 const postOperationBills = async (req: RequestExt, res: Response) => {
   try {
-      console.log('req', req)
         const { user, body, files } = req;
         body.users = `${user?._id}`;
         var valueOperation = JSON.parse(req.body.data)
@@ -110,12 +109,15 @@ const postOperationBills = async (req: RequestExt, res: Response) => {
           const  responseOrder = await insertOperationBills(reqOperation);
           res.send(responseOrder);
         } else {
-          console.log('llego al update')
+          // console.log('llego al update')
+          // console.log('llego al update', valueOperation)
+          // console.log('llego al update', reqOperation)
           const response = await updateOperation(valueOperation._id, reqOperation);
           res.send(response);
         }
        
   } catch (e) {
+    console.log('llego al update', e)
       handleHttp(res, "ERROR_POST_OPERATIONBILLS", e)
   }
 }

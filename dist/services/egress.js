@@ -305,7 +305,7 @@ const getOrderDetail = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getOrderDetail = getOrderDetail;
 const validPaidOrder = (order) => {
-    if (order.status === "paid_out" && order.amountPaid <= 0) {
+    if (order.status === "pagado" && order.amountPaid <= 0) {
         return "NOT_FOUND_AMOUNT";
     }
     // return "paso la validacion";

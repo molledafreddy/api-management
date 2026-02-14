@@ -54,6 +54,7 @@ const getOrder = (_id) => __awaiter(void 0, void 0, void 0, function* () {
         if (Object.entries(responseItem).length > 0) {
             response.docs = responseItem;
         }
+        console.log('responseItem', responseItem);
         return response;
     }
     catch (error) {
@@ -291,7 +292,7 @@ const getOrderDetail = (id) => __awaiter(void 0, void 0, void 0, function* () {
     filtro = {
         _id: new mongoose_1.default.Types.ObjectId('6372308ba15b0459089cf6e0'),
         providers: new mongoose_1.default.Types.ObjectId('6358403b25b29d9b3d42846c'),
-        status: 'paid_out',
+        status: 'pagado',
         // EstimateReceptionDate:{
         //     $gte: dateStr,
         //     $lt: nextDate
@@ -332,7 +333,7 @@ const getOrderDetail = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getOrderDetail = getOrderDetail;
 const validPaidOrder = (order) => {
-    if (order.status === "paid_out" && order.amountPaid <= 0) {
+    if (order.status === "pagado" && order.amountPaid <= 0) {
         return "NOT_FOUND_AMOUNT";
     }
     // return "paso la validacion";
@@ -369,19 +370,19 @@ const insertOrUpdateOrder = (order) => __awaiter(void 0, void 0, void 0, functio
         return "PROVEEDOR_NOT_FOUND";
     }
     // return [order];
-    if (order.status != "paid_out"
+    if (order.status != "pagado"
         && order.estimatedAmount <= 0) {
         return "NOT_FOUND_ESTIMATED_AMOUNT";
     }
     // console.log('orderorderorder', order)
     // return [order];
     // return "paso la validacion";
-    // if (order.status != "paid_out" 
+    // if (order.status != "pagado" 
     //     && order.egress != undefined 
     //     && Object.entries(order?.egress as any).length > 0) {
     //     return "INFORMATION_EGREES_WITH_DATA";
     // }
-    if (order.status === "paid_out") {
+    if (order.status === "pagado") {
         const value = validPaidOrder(order);
         if (value != "VALID_SUCCESS") {
             return value;
@@ -404,7 +405,6 @@ const insertOrUpdateOrder = (order) => __awaiter(void 0, void 0, void 0, functio
     let dataFiles = [];
     // console.log('archivos', operation.files)
     if (Object.keys(order.files).length > 0) {
-        console.log('ingreso tiene archivos');
         (_a = order.files) === null || _a === void 0 ? void 0 : _a.forEach(element => {
             // console.log('element',element)
             dataFiles.push({
@@ -451,7 +451,7 @@ const insertOrder = (idWorkingDay, data) => __awaiter(void 0, void 0, void 0, fu
         };
         const responseInsert = yield logisticOrder_1.default.create(dataLogistic);
         console.log('responseInsert Logistinc', responseInsert);
-        // if (data.status === 'paid_out') {
+        // if (data.status === 'pagado') {
         // console.log('ingreso aca createEgress')
         createEgress(responseInsertOrder._id, data);
         // }  
@@ -512,9 +512,8 @@ const getEgress = (orderId) => __awaiter(void 0, void 0, void 0, function* () {
     return resp;
 });
 const updateOrder = (id, idWorkingDay, data) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('updateOrder', data);
     const responseItem = yield order_1.default.findOneAndUpdate({ _id: id }, data, { new: true });
-    console.log('responseItem actualizacion de orden', responseItem);
+    // console.log('responseItem actualizacion de orden', responseItem);
     // return responseItem;
     // id as string
     const resultGet = yield getOrder(id);
@@ -541,23 +540,15 @@ const updateOrder = (id, idWorkingDay, data) => __awaiter(void 0, void 0, void 0
         // console.log('ingreso else debe crear egreseo')
         createEgress(id, data);
     }
-    // if (data.status === 'paid_out') {
+    // if (data.status === 'pagado') {
     // return resultEgress;
     // }
     return responseItem;
 });
 const updateEgress = (orderId, data) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    // console.log('valor', data)
-    // return data;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     const validEgress = yield getEgress(orderId);
-    console.log('data orden', data);
-    console.log('validEgress inreso a la actualizacion del ingreso', orderId, validEgress);
     if (Object.keys(validEgress).length > 0) {
-        // console.log("ingreso se creara un abono")
-        // console.log("ingreso se creara un abono")
-        console.log("ingreso se creara un abono data?.dataFiles", data === null || data === void 0 ? void 0 : data.dataFiles);
-        console.log("ingreso se creara un abono data?.files", data === null || data === void 0 ? void 0 : data.files);
         const dataEgress = {
             invoiceNumber: (_a = data.egress) === null || _a === void 0 ? void 0 : _a.invoiceNumber,
             orders: orderId,
@@ -566,12 +557,9 @@ const updateEgress = (orderId, data) => __awaiter(void 0, void 0, void 0, functi
             type: 'orders',
             paymentDate: data === null || data === void 0 ? void 0 : data.paymentDate,
         };
-        console.log('modelo egreso', dataEgress);
         let infoFile = [];
         if (Object.keys(data === null || data === void 0 ? void 0 : data.dataFiles).length > 0 && Object.keys(data === null || data === void 0 ? void 0 : data.files).length > 0) {
-            // infoFile.push(data?.files);
-            console.log('ingreso tiene datafiles y files');
-            yield ((_b = data === null || data === void 0 ? void 0 : data.dataFiles) === null || _b === void 0 ? void 0 : _b.forEach(element => {
+            (_b = data === null || data === void 0 ? void 0 : data.dataFiles) === null || _b === void 0 ? void 0 : _b.forEach(element => {
                 infoFile.push({
                     filename: element.filename,
                     path: element.path,
@@ -579,8 +567,8 @@ const updateEgress = (orderId, data) => __awaiter(void 0, void 0, void 0, functi
                     size: element.size,
                     mimetype: element.mimetype
                 });
-            }));
-            yield ((_c = data === null || data === void 0 ? void 0 : data.files) === null || _c === void 0 ? void 0 : _c.forEach(element => {
+            });
+            (_c = data === null || data === void 0 ? void 0 : data.files) === null || _c === void 0 ? void 0 : _c.forEach(element => {
                 infoFile.push({
                     filename: element.filename,
                     path: element.path,
@@ -588,15 +576,10 @@ const updateEgress = (orderId, data) => __awaiter(void 0, void 0, void 0, functi
                     size: element.size,
                     mimetype: element.mimetype
                 });
-            }));
-            console.log('infoFiles', infoFile);
-            // infoFile.push(data?.files as any);
+            });
             dataEgress.files = infoFile;
-            // console.log('infoFiles dataEgress', dataEgress)
         }
         else if (Object.keys(data === null || data === void 0 ? void 0 : data.files).length > 0) {
-            // infoFile = data?.files as any;
-            console.log('ingreso tiene files');
             dataEgress.files = data.files;
         }
         else if (Object.keys(data === null || data === void 0 ? void 0 : data.dataFiles).length > 0) {
@@ -611,17 +594,14 @@ const updateEgress = (orderId, data) => __awaiter(void 0, void 0, void 0, functi
             }));
             dataEgress.files = infoFile;
         }
-        console.log("dataEgress", dataEgress);
         const responseInsertE = yield egress_1.default.findOneAndUpdate({ _id: (_e = data === null || data === void 0 ? void 0 : data.egress) === null || _e === void 0 ? void 0 : _e._id }, dataEgress, { new: true });
-        console.log('resultado egresos', responseInsertE);
         const deleteI = yield paymentTypeHasEgress_1.default.deleteMany({ egress: (_f = data === null || data === void 0 ? void 0 : data.egress) === null || _f === void 0 ? void 0 : _f._id });
-        console.log('data.egress?.paymentHasEgress', (_g = data.egress) === null || _g === void 0 ? void 0 : _g.paymentHasEgress);
-        if (Object.keys((_h = data.egress) === null || _h === void 0 ? void 0 : _h.paymentHasEgress).length > 0) {
+        if (Object.keys((_g = data.egress) === null || _g === void 0 ? void 0 : _g.paymentHasEgress).length > 0) {
             // let dataPayment: any = [];
             const resultPayments = yield (0, paymentType_1.getPaymentTypes)();
             if (Object.keys(resultPayments).length > 0) {
                 let dataPayment = [];
-                yield ((_k = (_j = data.egress) === null || _j === void 0 ? void 0 : _j.paymentHasEgress) === null || _k === void 0 ? void 0 : _k.forEach((item) => {
+                yield ((_j = (_h = data.egress) === null || _h === void 0 ? void 0 : _h.paymentHasEgress) === null || _j === void 0 ? void 0 : _j.forEach((item) => {
                     var _a;
                     for (let i = 0; i < resultPayments.length; i++) {
                         const type = resultPayments[i];
@@ -638,7 +618,6 @@ const updateEgress = (orderId, data) => __awaiter(void 0, void 0, void 0, functi
                     dataPayment.push(dataPaymentTypeHasEgress);
                 }));
                 const responseInsertP = yield paymentTypeHasEgress_1.default.insertMany(dataPayment);
-                console.log('responseInsertP', responseInsertP);
             }
         }
         return dataEgress;

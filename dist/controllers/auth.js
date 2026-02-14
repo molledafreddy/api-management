@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerCtrl = exports.loginCtrl = void 0;
 const auth_1 = require("../services/auth");
 const registerCtrl = (_a, res_1) => __awaiter(void 0, [_a, res_1], void 0, function* ({ body }, res) {
+    console.log('📋 Registro de usuario:', body);
     const responseUser = yield (0, auth_1.registerNewUser)(body);
     res.send(responseUser);
 });

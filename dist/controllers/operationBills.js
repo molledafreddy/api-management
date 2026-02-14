@@ -59,7 +59,6 @@ exports.getPaymentHasEgress = getPaymentHasEgress;
 // };
 const postOperationBills = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('req', req);
         const { user, body, files } = req;
         body.users = `${user === null || user === void 0 ? void 0 : user._id}`;
         var valueOperation = JSON.parse(req.body.data);
@@ -109,12 +108,15 @@ const postOperationBills = (req, res) => __awaiter(void 0, void 0, void 0, funct
             res.send(responseOrder);
         }
         else {
-            console.log('llego al update');
+            // console.log('llego al update')
+            // console.log('llego al update', valueOperation)
+            // console.log('llego al update', reqOperation)
             const response = yield (0, operationBill_1.updateOperationBills)(valueOperation._id, reqOperation);
             res.send(response);
         }
     }
     catch (e) {
+        console.log('llego al update', e);
         (0, error_handle_1.handleHttp)(res, "ERROR_POST_OPERATIONBILLS", e);
     }
 });

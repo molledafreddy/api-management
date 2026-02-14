@@ -32,9 +32,16 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const multer_1 = __importStar(require("multer"));
-const PATH_STORAGE = `${process.cwd()}/storage`;
+const fs_extra_1 = __importDefault(require("fs-extra"));
+const path_1 = __importDefault(require("path"));
+const PATH_STORAGE = path_1.default.join(process.cwd(), "storage");
+// Crear directorio si no existe
+fs_extra_1.default.ensureDirSync(PATH_STORAGE);
 const storage = (0, multer_1.diskStorage)({
     destination(req, file, cb) {
         cb(null, PATH_STORAGE);

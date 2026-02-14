@@ -27,6 +27,7 @@ const getOrder = (_a, res_1) => __awaiter(void 0, [_a, res_1], void 0, function*
     try {
         const { id } = params;
         const responseItem = yield (0, order_1.getOrder)(id);
+        console.log('responseItem', responseItem);
         res.send(responseItem);
     }
     catch (e) {
@@ -144,8 +145,11 @@ const postOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             egress: egress,
             users: user,
             type: 'orders',
+            validAdmin: valueOrder === null || valueOrder === void 0 ? void 0 : valueOrder.validAdmin,
+            validDate: valueOrder === null || valueOrder === void 0 ? void 0 : valueOrder.validDate,
+            noteValid: valueOrder === null || valueOrder === void 0 ? void 0 : valueOrder.noteValid
         };
-        // console.log('requestO', requestO)
+        console.log('requestO', requestO);
         // res.send(body);
         // return {body};
         // res.send(egress);
